@@ -1,0 +1,19 @@
+
+◆モデルを生成◆
+
+★コマンド★
+php artisan make:model Owner -m 
+php artisan make:model Admin -m
+
+-mでマイグレーションファイルも生成
+ 
+app/models フォルダ以下に生成される 
+Authenticatable を継承
+
+◆create_users_tableの内容を owner, adminにそれぞれコピーする◆
+
+★コマンド★
+php artisan make:migration create_owner_password_resets 
+php artisan make:migration create_admin_password_resets 
+
+password_resetsの内容をそれぞれコピーする
