@@ -1,0 +1,55 @@
+
+\app\Providers\RouteServiceProvider.php
+
+それぞれホームURLを設定する
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+
+  class RouteServiceProvider extends ServiceProvider
+  {
+
+    // ホームURLを設定
+    // 定数の場合、全て大文字にするルールがある
+    public const HOME = '/user/dashboard'; '/'に戻す可能性あり
+    public const OWNER_HOME = '/owner/dashboard';
+    public const ADMIN_HOME = '/admin/dashboard';
+
+
+///////////////////////////////////////////////////////
+
+
+    // サービスプロバイダが読み込まれた後に実行される
+    public function boot()
+    {
+        $this->configureRateLimiting();
+
+        $this->routes(function () {
+            Route::middleware('api')
+                ->prefix('api')
+                ->group(base_path('routes/api.php'));
+
+                Route::prefix('admin')
+                ->as('admin.')
+                ->middleware('web')
+                ->group(base_path('routes/admin.php'));
+
+            Route::prefix('owner')
+                ->as('owner.')
+                ->middleware('web')
+                ->group(base_path('routes/owner.php'));
+
+            Route::prefix('user')
+                ->as('user.')
+                ->middleware('web')
+                ->group(base_path('routes/user.php'));
+
+
+  ◆解説◆
+　グループを定義する前にmiddlewareメソッドを使用する
+　groupとすることで、base_path()のヘルプ関数が適応される。
+
+◆疑問点◆
+namespaceはいるのか？
+
+
