@@ -5,6 +5,8 @@
     <form method="POST" action="{{ route('admin.login') }}">
         @csrf
 
+    <h1 class ="flex justify-center">管理者専用ログインページ</h1>
+
         <!-- Email Address -->
         <div>
             <x-input-label for="email" :value="__('Email')" />
