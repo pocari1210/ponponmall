@@ -27,7 +27,7 @@ class ConfirmablePasswordController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        //guardをownersに変更
+        //guardをusersに変更
         if (! Auth::guard('users')->validate([
             'email' => $request->user()->email,
             'password' => $request->password,

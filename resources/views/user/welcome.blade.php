@@ -24,6 +24,8 @@
         <div class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center py-4 sm:pt-0">
             @if (Route::has('user.login'))
                 <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
+                    <!-- 認証をしているか確認 -->
+                    <!-- @authにguard設定をする -->
                     @auth('users')
                         <a href="{{ url('user/dashboard') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Dashboard</a>
                     @else
@@ -122,9 +124,9 @@
                         </div>
                     </div>
 
-                    <!-- <div class="ml-4 text-center text-sm text-gray-500 sm:text-right sm:ml-0">
+                    <div class="ml-4 text-center text-sm text-gray-500 sm:text-right sm:ml-0">
                         Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})
-                    </div> -->
+                    </div>
                 </div>
             </div>
         </div>
