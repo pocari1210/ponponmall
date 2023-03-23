@@ -1,0 +1,28 @@
+
+\app\Http\Requests\Auth\LoginRequest.php
+
+ログインフォームに入力された値から
+パスワードを比較し、認証を行う
+
+attemptメソッド
+
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+public function authenticate(): void
+  {
+    $this->ensureIsNotRateLimited();
+
+　　 オーナーのログインからきたら、変数の設定をする
+   　if($this->routeIs('owner.*')){
+        $guard = 'owners';
+     } elseif($this->routeIs('admin.*')){
+        $guard = 'admin';
+     } else {
+        $guard = 'users';
+     }
+
+　　　//guardの情報を追記する
+     if (! Auth::guard($guard)
+　　　　->attempt($this->only('email', 'password'), $this->filled('remember'))) {
+        RateLimiter::hit($this->throttleKey());

@@ -1,9 +1,15 @@
-<?php
 
-namespace App\Http\Middleware;
+\app\Http\Middleware\Authenticate.php
 
-use Illuminate\Auth\Middleware\Authenticate as Middleware;
-use Illuminate\Support\Facades\Route;
+ユーザが未認証の場合のリダイレクト処理
+
+◆リファレンス◆
+https://readouble.com/laravel/9.x/ja/facades.html
+
+ファサードクラスリファレンスのrouteを参照
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
 
 class Authenticate extends Middleware
 {
@@ -17,6 +23,7 @@ class Authenticate extends Middleware
      * @param  \Illuminate\Http\Request  $request
      * @return string|null
      */
+
     protected function redirectTo($request)
     {
         // ★Jsonでなければloginページに遷移する★
@@ -30,4 +37,3 @@ class Authenticate extends Middleware
             }
         }
     }
-}
