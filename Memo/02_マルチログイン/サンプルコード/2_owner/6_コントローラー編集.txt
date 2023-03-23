@@ -1,0 +1,5 @@
+
+\app\Http\Controllers\Owner(新規フォルダ作成)
+
+app\Http\Controllers\Authをコピーし、格納する
+

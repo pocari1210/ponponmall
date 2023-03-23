@@ -2,15 +2,15 @@
 
 use App\Http\Controllers\ProfileController;
 
-use App\Http\Controllers\Admin\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Admin\Auth\ConfirmablePasswordController;
-use App\Http\Controllers\Admin\Auth\EmailVerificationNotificationController;
-use App\Http\Controllers\Admin\Auth\EmailVerificationPromptController;
-use App\Http\Controllers\Admin\Auth\NewPasswordController;
-use App\Http\Controllers\Admin\Auth\PasswordController;
-use App\Http\Controllers\Admin\Auth\PasswordResetLinkController;
-use App\Http\Controllers\Admin\Auth\RegisteredUserController;
-use App\Http\Controllers\Admin\Auth\VerifyEmailController;
+use App\Http\Controllers\Owner\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Owner\Auth\ConfirmablePasswordController;
+use App\Http\Controllers\Owner\Auth\EmailVerificationNotificationController;
+use App\Http\Controllers\Owner\Auth\EmailVerificationPromptController;
+use App\Http\Controllers\Owner\Auth\NewPasswordController;
+use App\Http\Controllers\Owner\Auth\PasswordController;
+use App\Http\Controllers\Owner\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Owner\Auth\RegisteredUserController;
+use App\Http\Controllers\Owner\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,15 +30,13 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth:owners', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
-
 
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
@@ -64,7 +62,7 @@ Route::middleware('guest')->group(function () {
                 ->name('password.store');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth:owners')->group(function () {
     Route::get('verify-email', EmailVerificationPromptController::class)
                 ->name('verification.notice');
 

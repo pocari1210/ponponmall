@@ -1,0 +1,17 @@
+
+\app\Http\Controllers\Owner\VerifyEmailController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+// namespaceをOwnerにあわせる
+namespace App\Http\Controllers\Owner\Auth;
+
+///////////////////////////////////////////////////////////////////
+
+public function __invoke(EmailVerificationRequest $request): RedirectResponse
+{
+   if ($request->user()->hasVerifiedEmail()) {
+
+   // リダイレクト先をOWNER_HOMEとする
+       return redirect()->intended(RouteServiceProvider::OWNER_HOME.'?verified=1');
+   }
