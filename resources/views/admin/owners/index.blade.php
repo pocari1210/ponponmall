@@ -14,6 +14,7 @@
             <div class="container px-5 mx-auto">
                 <div class="lg:w-2/3 w-full mx-auto overflow-auto">
                 
+                <x-flash-message status="session('status')" />
                 <div class="flex justify-end mb-3">
                     <button onclick="location.href='{{ route('admin.owners.create')}}'" class=" text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">登録する</button>
                 </div>

@@ -1,4 +1,16 @@
 
+コントローラーの編集
+    
+　　public function create()
+    {
+        return view('admin.owners.create');
+    }
+
+
+///////////////////////////////////////////////////////////////
+
+ビューの編集
+
 ディレクトリ
 \resources\views\admin\owners\create.blade.php
 
