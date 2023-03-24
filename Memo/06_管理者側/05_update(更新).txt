@@ -1,0 +1,31 @@
+
+
+★コントローラーの更新★
+
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+◆コード解説◆
+update(Request $request, $id)
+⇒formに入力された情報がRequestに入り、
+　$requestでインスタンス化される
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+★ビューの更新★
+
+ディレクトリ
+\resources\views\admin\owners\edit.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<form method="post" action="{{route('admin.owners.update',['owner'=> $owner->id])}}">
+  @method('PUT')
+  @csrf
+
+◆コード解説◆
+updateをする場合、form直下に
+@method('PUT')
+を追記する必要がある

@@ -67,24 +67,3 @@ buttonが二つあるが、どちらかをsubmitにしないと動かないの�
 store(Request $request)をメソッドインジェクションといい、
 formに入力された値がRequestにはいり
 $requestでインスタンス化される。
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
