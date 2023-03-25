@@ -7,10 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 // 認証機能のモジュールをインポート
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+// 論理削除(softdelete)をインポート
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 // 認証機能を継承する
 class Owner extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory,SoftDeletes;
 
     // app\Models\User.phpをベースに、
     // $fillable,$hidden,$castsをコピペする

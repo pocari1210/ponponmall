@@ -2,6 +2,9 @@
 
 ★コントローラーの更新★
 
+ディレクトリ
+
+
     public function update(Request $request, $id)
     {
         //
