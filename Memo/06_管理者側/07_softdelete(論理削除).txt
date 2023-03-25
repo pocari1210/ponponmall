@@ -83,9 +83,10 @@ Route::prefix('expired-owners')->
         return redirect()->route('admin.expired-owners.index');
     }
   
-
 ※注意事項※
 
 forceDelete()とする場合、viewファイルで
 @method('delete')
 は不要なので注意する
+
+
