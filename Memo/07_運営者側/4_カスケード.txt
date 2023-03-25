@@ -1,0 +1,20 @@
+
+4_カスケード
+
+子テーブルにカスケードを追記する
+
+ディレクトリ
+\database\migrations\作成日_create_shops_table.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+ Schema::create('shops', function (Blueprint $table) {
+   $table->foreignId('owner_id')
+    ->constrained()
+    ->onUpdate('cascade')
+    ->onDelete('cascade');
+
+★コード解説★
+外部キー制約でテーブルを紐づけた場合、
+削除や更新をする場合、
+cascadeをつける必要がある
