@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Shop;
 // 認証機能のモジュールをインポート
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -46,5 +47,10 @@ class Owner extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-    ];    
+    ];
+    
+    public function shop() 
+    { 
+        return $this->hasOne(Shop::class); 
+    }    
 }
