@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('information'); 
             $table->string('filename'); 
             $table->boolean('is_selling');
+            $table->timestamps();
         });
     }
 
