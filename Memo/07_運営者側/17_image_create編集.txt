@@ -1,0 +1,61 @@
+
+17_image_create編集
+
+◆UploadImageRequest編集◆
+
+ディレクトリ
+\app\Http\Requests\UploadImageRequest.php
+
+rules()に下記を追記する
+
+'files.*.image' => 'required|image|mimes:jpg,jpeg,png|max:2048'
+
+★コード解説★
+複数画像を登録する際、配列でバリデーションで登録できる
+rulesを追記
+
+「.*.」とすることで、配列でわたってくる各要素を
+バリデーションでチェックできる
+
+https://readouble.com/laravel/9.x/ja/validation.html
+⇒配列のバリデーションを参照
+
+//////////////////////////////////////////////////////////////////////
+
+◆ビューファイル新規作成◆
+
+ディレクトリ
+\resources\views\owner\images\create.blade.php
+
+  <div class="relative">
+    <label for="image" class="leading-7 text-sm text-gray-600">画像</label>
+    <input type="file" id="image" name="files[][image]" multiple accept=“image/png,image/jpeg,image/jpg” class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+  </div>
+
+★コード解説★
+
+name="files[][image]"
+⇒Laravelのバリデーションをかけるために、
+このような記述をする
+
+multiple
+⇒inputタグにmultipleを追記し、複数画像のアップロードを
+　できるようにする
+
+////////////////////////////////////////////////////////////////////////
+
+◆コントローラー編集◆
+
+ディレクトリ
+\app\Http\Controllers\Owner\ImageController.php
+
+use App\Http\Requests\UploadImageRequest;
+use App\Services\ImageService;
+
+    public function store(UploadImageRequest $request)
+    {
+
+★コード解説★
+UploadImageRequestを使用するために、
+storeメソッドの引数をRequestから編集する
+

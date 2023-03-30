@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Shop;
+use App\Models\Image;
 // 認証機能のモジュールをインポート
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -52,5 +53,10 @@ class Owner extends Authenticatable
     public function shop() 
     { 
         return $this->hasOne(Shop::class); 
+    }
+
+    public function image()
+    {
+        return $this->hasMany(Image::class);
     }    
 }

@@ -25,14 +25,15 @@ if($type === 'products'){
   @endif
 </div>
 
+※<img src="{{ asset($path . $filename)}}">とし、
+　$typeに紐づいたパスを$pathに代入している
+
 
 //////////////////////////////////////////////////////////////////////
 
 ◆コントローラー編集◆
 
 ディレクトリ
-
-
 
 class ImageController extends Controller
 {
