@@ -53,17 +53,7 @@ DB::table('images')->insert([
 ディレクトリ
 \public\storage\products
 
+登録が終わったら下記コマンドを実行し、
+ダミーデータを登録する
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+php artisan migrate:refresh --seed
