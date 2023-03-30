@@ -3,7 +3,7 @@
 
 オーナーを作った時点でショップも作成をする
 
-複数のテーブルを登録する場合は、
+1回の処理で複数のテーブルを登録する場合は、
 トランザクションの処理が必要
 
 ◆fillable追加◆
@@ -39,7 +39,8 @@ use Illuminate\Support\Facades\Log;
 
 　try{
     DB::transaction(function () use($request) {
-       $owner = Owner::create([
+       
+	$owner = Owner::create([
           'name' => $request->name,
           'email' => $request->email,
           'password' => Hash::make($request->password),

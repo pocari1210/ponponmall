@@ -1,0 +1,69 @@
+
+21_image ダミーデータ
+
+下記コマンドでシーダーファイルを作成する
+
+コマンド
+php artisan make:seed ImageSeeder
+
+画像はリサイズ・リネーム後 
+storage/productsフォルダに 保存 
+
+いくつかのファイル名を書き換えつつダミーとして登録 
+sample1.jpg ～ sample6.jpg 
+
+Storage内ファイルはgitにアップすると消えるので 
+public/images内に保存しつつ 
+README.md に明記
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+◆seederファイル編集◆
+
+ディレクトリ
+\database\seeders\ImageSeeder.php
+
+use Illuminate\Support\Facades\DB;
+
+DB::table('images')->insert([
+   [
+      'owner_id' => 1,
+      'filename' => 'sample1.jpg',
+      'title' => null
+   ],
+
+//////////////////////////////////////////////////////////////////////////////
+
+◆databaseseederファイル追記◆
+
+ディレクトリ
+\database\seeders\DatabaseSeeder.php
+
+    public function run()
+    {
+        $this->call([
+            ImageSeeder::class,
+        ]);
+    }
+
+/////////////////////////////////////////////////////////////////////////////
+
+◆ダミーデータ用の画像を保存する◆
+
+ディレクトリ
+\public\storage\products
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
