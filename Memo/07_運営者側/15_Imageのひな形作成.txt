@@ -1,0 +1,94 @@
+
+15_Imageのひな形作成
+
+◆Modelを作成◆
+
+コマンド
+php artisan make:model Image -m
+
+///////////////////////////////////////////////////////////////
+
+◆Modelファイル編集◆
+
+ディレクトリ
+\app\Models\Image.php
+
+    protected $fillable = [
+        'owner_id',
+        "filename",
+    ];
+
+★コード解説★
+新規投稿する際の処理に使用予定
+owner_idとfilenameを指定
+
+///////////////////////////////////////////////////////////////
+
+◆マイグレーションファイル編集◆
+
+ディレクトリ
+\database\migrations\作成日_create_images_table.php
+
+    public function up()
+    {
+        Schema::create('images', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('owner_id')
+            ->constrained()
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
+            $table->string('filename');
+            $table->string('title')->nullable();
+            $table->timestamps();
+        });
+    }
+
+★コード解説★
+$table->foreignId('owner_id')
+⇒外部キーでowner_idと紐づける
+
+タイトル名は空で登録してもいいよう
+nullable()を追記する
+
+///////////////////////////////////////////////////////////////
+
+◆コントローラーファイル作成◆
+
+コマンド
+php artisan make:controller Owner/ImageController --resource
+
+///////////////////////////////////////////////////////////////
+
+◆route編集◆
+
+ディレクトリ
+\routes\owner.php
+
+use App\Http\Controllers\Owner\ImageController;
+
+Route::resource('images', ImageController::class)
+->middleware('auth:owners')
+->except(['show']);
+
+◆コード解説
+
+->except(['show']);
+⇒コントローラーのshowメソッドが不要なのでexceptを記述
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+ここまで設定して、下記コマンドでrouteが通っていればOK
+
+php artisan route:list
+
+
+
+
+
+
+
+
+
+
+    

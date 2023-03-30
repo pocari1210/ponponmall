@@ -1,7 +1,7 @@
 <?php
 
 //namespaceをUserにあわせる
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\User\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Auth\Events\PasswordReset;
