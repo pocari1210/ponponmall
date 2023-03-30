@@ -1,0 +1,44 @@
+
+
+画像登録のコードをコンポーネント化する
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+◆shops/indexファイル◆
+
+下記コードを切り取り、コンポーネートファイルに貼り付ける
+
+<div>
+    @if(empty($shop->$filename))
+        <img src="{{ asset('images/no_image.jpg')}}">
+    @else
+        <img src="{{ asset('storage/shops/' . $shop->$filename)}}">
+    @endif
+</div>
+
+
+◆コンポーネートファイル編集◆
+\resources\views\components\thumbnail.blade.php(新規作成)
+
+shops/indexファイルから切り取ったコードを張り付ける
+
+
+◆shops/indexファイル◆
+
+<div class="text-xl">{{ $shop->name }}</div>
+                                
+<x-thumbnail />
+
+/////////////////////////////////////////////////////////////////////
+
+チェックボックスをビューに導入する場合
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+
+<div class="p-2 w-1/2 mx-auto">
+  <div class="relative flex justify-around">
+     <div><input type="radio" name="is_selling" value="1" class="mr-2" @if($shop->is_selling === 1){ checked } @endif >販売中</div>
+     <div><input type="radio" name="is_selling" value="0" class="mr-2" @if($shop->is_selling === 0){ checked } @endif >停止中</div>
+  </div>
+</div>

@@ -88,16 +88,14 @@ use InterventionImage;
 
 ★コード解説★
 
-encode()
-⇒画像として使用することができる
 
-●$fileName = uniqid(rand().'_');
+● = uniqid(rand().'_');
 ⇒uniqid(rand().'_')でユニークIDを作りずつ重複しないファイル名を作成
 
 ●$extension = $imageFile->extension();
 ⇒拡張子を取得
 
-●$fileNameToStore = $fileName. '.' . $extension;
+●ToStore = $fileName. '.' . $extension;
 ⇒ファイル名 + 拡張子
 
 ●InterventionImage::make($imageFile)->resize(1920, 1080)->encode();
@@ -108,3 +106,6 @@ InterventionImage::make($imageFile)
 
 resize(1920, 1080)
 ⇒画像の横幅が1920,縦幅が1080になる
+
+encode()
+⇒画像として使用することができる
