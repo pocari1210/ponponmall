@@ -1,9 +1,11 @@
 <?php
 
 namespace App\Models;
-use App\Models\Owner;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Owner;
+use App\Models\Product;
 
 class Shop extends Model
 {

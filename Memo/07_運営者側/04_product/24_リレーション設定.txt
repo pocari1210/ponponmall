@@ -1,0 +1,160 @@
+
+24_リレーション設定
+
+モデルを紐づける
+
+//////////////////////////////////////////////////////////////////
+
+◆親モデルの編集(Shop・主テーブル)◆
+
+ディレクトリ
+\app\Models\Shop.php
+
+ShopとProductは1対多の関係
+主テーブルから従テーブルを取得する
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use App\Models\Product;
+
+    public function product()
+    {
+        return $this->hasMany(Product::class);
+    }
+
+////////////////////////////////////////////////////////////////////////////
+
+◆子モデルの編集(Product・従テーブル)◆
+
+ディレクトリ
+\app\Models\Product.php
+
+従テーブルから主テーブルを取得する
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use App\Models\Shop;
+
+    public function shop()
+    {
+        return $this->belongsTo(Shop::class);
+    }
+
+////////////////////////////////////////////////////////////////////////////
+
+◆マイグレーション編集◆
+
+ディレクトリ
+\database\migrations\作成日_create_products_table.php
+
+    public function up()
+    {
+        Schema::create('products', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('shop_id')
+            ->constrained()
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
+            $table->foreignId('secondary_category_id')
+            ->constrained();
+            $table->foreignId('image1')
+            ->nullable()
+            ->constrained('images');
+            $table->timestamps();
+        });
+    }
+
+★コード解説★
+
+Laravel8からconstrainedの前にnullableを記述しなくては
+いけなくなった。
+
+$table->foreignId('image1')
+⇒カラム名を「image1」のようにするとどのモデルか
+　Laravelが判別できないため、
+　constrained('images')でimageモデルと判別させる
+
+////////////////////////////////////////////////////////////////////////
+
+
+◆子モデルの編集(Product・従テーブル)◆
+
+ディレクトリ
+\app\Models\Product.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+主テーブルから従テーブルを取得する
+
+    public function category()
+    {
+        return $this->belongsTo(SecondaryCategory::class, 'secondary_category_id');
+    }
+
+    public function imageFirst()
+    {
+        return $this->belongsTo(Image::class, 'image1', 'id');
+    }
+
+★コード解説★
+
+カラム名とテーブル名は同じ名称にできないため、imageFirstとする
+
+belongsTo(Image::class, 'image1', 'id');
+⇒image1とidをつけていない場合、Laravel側で推測ができないため、
+　第三引数をimageモデルのidとし、紐づけている
+
+////////////////////////////////////////////////////////////////////////
+
+◆シーダー編集◆
+
+下記コマンドでシーダーファイル作成
+
+コマンド
+php artisan make:seed ProductSeeder
+
+ディレクトリ
+\database\seeders\ProductSeeder.php
+
+リレーションができているか確認したいので 
+FKのダミーデータを先に作成
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use Illuminate\Support\Facades\DB;
+
+    public function run()
+    {
+        DB::table('products')->insert([
+            [
+                'shop_id' => 1,
+                'secondary_category_id' => 1,
+                'image1' => 1,
+            ],
+
+/////////////////////////////////////////////////////////////////////////
+
+◆DatabaseSeeder追記◆
+
+ディレクトリ
+\database\seeders\DatabaseSeeder.php
+
+
+    public function run()
+    {
+        $this->call([
+            ProductSeeder::class
+        ]);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
