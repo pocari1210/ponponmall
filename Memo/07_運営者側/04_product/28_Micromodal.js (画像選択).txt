@@ -1,0 +1,86 @@
+
+28_Micromodal.js (画像選択)
+
+シンプル・軽量・VanillaJS 
+https://micromodal.vercel.app/
+
+インストール
+npm install micromodal --save 
+
+HTML/CSSのサンプル
+https://gist.github.com/ghosh/4f94cf497d7090359a5c9f81caf60699
+
+////////////////////////////////////////////////////////////////////
+
+◆JSモジュール追加◆
+
+\resources\js\bootstrap.js
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
+↓追記
+import MicroModal from 'micromodal';  // es6 module
+
+MicroModal.init({
+    disableScroll: true
+});
+↑追記
+
+★コード解説★
+
+disableScroll: true
+⇒モーダルが開いている時にスクロールをさせない
+
+////////////////////////////////////////////////////////////////////
+
+◆CSSモジュール追加◆
+
+ディレクトリ
+\resources\css\micromodal.css
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+micromodal.cssのファイルの中に下記を追記する
+
+https://gist.github.com/ghosh/4f94cf497d7090359a5c9f81caf60699
+⇒Rawボタンを押し、コピーし、貼り付ける
+
+///////////////////////////////////////////////////////////////////////
+
+ディレクトリ
+\resources\css\app.css
+
+micromodal.cssをインポートする
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+@import 'micromodal';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+★コード解説★
+一番上に記述をする必要があるので注意
+
+///////////////////////////////////////////////////////////////////////////
+
+◆コンポーネント編集◆
+
+ディレクトリ
+\resources\views\components\select-image.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+https://gist.github.com/ghosh/4f94cf497d7090359a5c9f81caf60699
+⇒micromodal.htmlの項目のRawボタンを押し、
+　コピーし、貼り付ける
+
+///////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+

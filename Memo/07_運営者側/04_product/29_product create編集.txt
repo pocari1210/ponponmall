@@ -1,0 +1,12 @@
+
+29_product create編集
+
+◆テーブル編集◆
+
+ディレクトリ
+\database\migrations\作成日_create_products_table.php
+
+◆ビューの編集◆
+
+ディレクトリ
+\resources\views\owner\products\create.blade.php
