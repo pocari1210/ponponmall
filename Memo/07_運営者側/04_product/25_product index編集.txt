@@ -53,7 +53,7 @@ Owner::findOrFail(Auth::id())->shop->product;
 ⇒ログインしているOwnerが作成したproductをすべて取得できる
 
 Owner::with('shop.product.imageFirst')
-⇒Eager Loadin(N + 1問題の対策)
+⇒Eager Loading(N + 1問題の対策)
 
   リレーション先のリレーション情報を取得 
   withメソッド、リレーションをドットでつなぐ
