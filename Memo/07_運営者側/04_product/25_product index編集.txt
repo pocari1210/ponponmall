@@ -1,0 +1,93 @@
+
+25_product index編集
+
+◆コントローラー編集◆
+
+ディレクトリ
+\app\Http\Controllers\Owner\ProductController.php
+
+indexメソッドを編集する
+
+★Eager Loadin★
+N + 1問題の対策 
+リレーション先のリレーション情報を取得 
+withメソッド、リレーションをドットでつなぐ
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use Illuminate\Support\Facades\Auth;
+use App\Models\Image;
+use App\Models\Product;
+use App\Models\SecondaryCategory;
+use App\Models\Owner;
+
+    public function __construct()
+    {
+        $this->middleware('auth:owners'); //ownerか否か確認
+
+        $this->middleware(function ($request, $next) {
+
+            $id = $request->route()->parameter('product'); 
+            if(!is_null($id)){ 
+            $productsOwnerId = Product::findOrFail($id)->shop->owner->id;
+                $productId = (int)$productsOwnerId; 
+                if($productId !== Auth::id()){ 
+                    abort(404);
+                }
+            }
+            return $next($request);
+        });
+    }
+
+    public function index()
+    {
+　　　  $ownerInfo = Owner::with('shop.product.imageFirst')
+        ->where('id', Auth::id())->get();
+
+        return view('owner.products.index',
+        compact('ownerInfo'));
+
+★コード解説★
+
+Owner::findOrFail(Auth::id())->shop->product;
+⇒ログインしているOwnerが作成したproductをすべて取得できる
+
+Owner::with('shop.product.imageFirst')
+⇒Eager Loadin(N + 1問題の対策)
+
+  リレーション先のリレーション情報を取得 
+  withメソッド、リレーションをドットでつなぐ
+
+  Ownerからshop,shopからproduct,productからimageFirstまでの
+　リレーションをまとめて取得している
+
+where('id', Auth::id())->get()
+⇒ログインしているOwnerの情報を取得できる
+
+//////////////////////////////////////////////////////////////////////////
+
+◆ビューの変数◆
+
+ディレクトリ
+\resources\views\owner\products\index.blade.php
+
+<div class="flex flex-wrap">
+  @foreach ($ownerInfo as $owner )
+   　@foreach($owner->shop->product as $product)
+      <div class="w-1/4 p-2 md:p-4">
+        <a href="{{ route('owner.products.edit', ['product' => $product->id ])}}">  
+          <div class="border rounded-md p-2 md:p-4">
+            <x-thumbnail :filename="$product->imageFirst->filename" type="products" />
+            <div class="text-gray-700">{{ $product->name }}</div>
+          </div>
+        </a>
+      </div>
+     @endforeach
+  @endforeach
+</div>
+
+発行されたSQLの結果が一行にまとめられている
+⇒select * from `images` where `images`.`id` in (1, 2, 3, 4)
+
+
+
