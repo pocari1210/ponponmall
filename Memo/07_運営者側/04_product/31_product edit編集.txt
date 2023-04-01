@@ -1,0 +1,145 @@
+
+31_product edit編集
+
+◆コントローラー編集◆
+
+ディレクトリ
+\app\Http\Controllers\Owner\ProductController.php
+
+editメソッドを編集
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+    public function edit($id)
+    {
+        $product = Product::findOrFail($id);
+        
+	$quantity = Stock::where('product_id', $product->id)
+        ->sum('quantity');
+
+        $shops = Shop::where('owner_id', Auth::id())
+        ->select('id', 'name')
+        ->get();
+
+        $images = Image::where('owner_id', Auth::id())
+        ->select('id', 'title', 'filename')
+        ->orderBy('updated_at', 'desc')
+        ->get();
+
+        $categories = PrimaryCategory::with('secondary')
+        ->get();
+
+        return view('owner.products.edit',
+            compact('product', 'quantity', 'shops', 
+            'images', 'categories'));
+    }
+
+★コード解説★
+
+$quantity = Stock::where('product_id', $product->id)
+->sum('quantity');
+⇒量と在庫を合計した結果をsum('quantity')とする
+
+///////////////////////////////////////////////////////////////////////////
+
+◆モデルの編集◆
+
+ディレクトリ
+\app\Models\Product.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+    public function imageSecond()
+    {
+        return $this->belongsTo(Image::class, 'image2', 'id');
+    }
+
+    public function imageThird()
+    {
+        return $this->belongsTo(Image::class, 'image3', 'id');
+    }
+
+    public function imageFourth()
+    {
+        return $this->belongsTo(Image::class, 'image4', 'id');
+    }
+
+★コード解説★
+2枚目から4枚目までの画像を設定する
+
+///////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集◆
+
+ディレクトリ
+\resources\views\owner\products\edit.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+★コード解説★
+
+<option value="{{ $secondary->id}}" 
+@if( $secondary->id === $product->secondary_category_id ) selected @endif >
+
+⇒$secondary->idがコントローラーからわたってくる
+　$product->secondary_category_idと同じなら
+　selectedで選択されている状態にする
+
+<x-select-image :images="$images" currentId="{{$product->image1}}" 
+currentImage="{{$product->imageFirst->filename ?? ''}}" 
+name="image1" />
+
+⇒現在選択されている画像を指定するために、
+　currentId(数値)とcurrentImage(文字列)の二つの属性を追加する
+
+<div>
+  <input type="radio" name="is_selling" value="1" class="mr-2" 
+  @if($product->is_selling === 1){ checked } @endif>販売中
+</div>
+
+⇒$product->is_sellingが1の場合は販売中、
+　0の場合は停止中にチェックがはいった状態になる
+
+///////////////////////////////////////////////////////////////////////////
+
+◆コンポーネント編集◆
+
+ディレクトリ
+\resources\views\components\select-image.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+@php
+
+　↓追記
+  $cImage = $currentImage ?? '' ;
+  $cId = $currentId ?? '' ;
+@endphp
+
+★コード解説★
+
+新規登録時は値がないので 値の有無を確認
+
+<div class="w-1/4">
+　
+  <img id="{{ $name }}_thumbnail" 
+　　↓追記
+　@if($cImage) src="{{ asset('storage/products/' . $cImage)}}" 
+　@else src="" @endif src="">
+</div>
+
+★コード解説★
+画像のファイル名があったら画像を出力し、なかったら空を返す
+
+<input id="{{ $name }}_hidden" 
+type="hidden" 
+name="{{ $name }}" 
+value="{{ $cId }}">
+
+★コード解説★
+value="{{ $cId }}とすることで、
+valueに$currentIdをわたしている
+
+
+
+

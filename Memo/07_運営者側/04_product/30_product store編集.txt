@@ -1,0 +1,139 @@
+
+30_product store編集
+
+◆モデルの編集◆
+
+ディレクトリ
+\app\Models\Product.php
+
+$fillable追加
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+    protected $fillable = [
+        'shop_id',
+        'name',
+        'information',
+        'price',
+        'is_selling',
+        'sort_order',
+        'secondary_category_id',
+        'image1',
+        'image2',
+        'image3',
+        'image4',
+    ];
+
+/////////////////////////////////////////////////////////////////////////////
+
+ディレクトリ
+\app\Models\Stock.php
+
+Stockにも$fillable追加
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+    protected $fillable = [
+        'product_id',
+        'type',
+        'quantity'
+    ];
+
+//////////////////////////////////////////////////////////////////////////
+
+◆コントローラー編集◆
+
+ディレクトリ
+\app\Http\Controllers\Owner\ProductController.php
+
+    public function store(Request $request)
+    {
+        // dd($request);
+        $request->validate([
+            'name' => 'required|string|max:50',
+            'information' => 'required|string|max:1000',
+            'price' => 'required|integer',
+            'sort_order' => 'nullable|integer',
+            'quantity' => 'required|integer',
+            'shop_id' => 'required|exists:shops,id',
+            'category' => 'required|exists:secondary_categories,id',
+            'image1' => 'nullable|exists:images,id',
+            'image2' => 'nullable|exists:images,id',
+            'image3' => 'nullable|exists:images,id',
+            'image4' => 'nullable|exists:images,id',
+            'is_selling' => 'required'
+        ]);
+
+        try{
+            DB::transaction(function () use($request) {
+                $product = Product::create([
+                    'name' => $request->name,
+                    'information' => $request->information,
+                    'price' => $request->price,
+                    'sort_order' => $request->sort_order,
+                    'shop_id' => $request->shop_id,
+                    'secondary_category_id' => $request->category,
+                    'image1' => $request->image1,
+                    'image2' => $request->image2,
+                    'image3' => $request->image3,
+                    'image4' => $request->image4,
+                    'is_selling' => $request->is_selling
+                ]);
+
+                Stock::create([
+                    'product_id' => $product->id,
+                    'type' => 1,
+                    'quantity' => $request->quantity
+                ]);
+            }, 2);
+        }catch(Throwable $e){
+            Log::error($e);
+            throw $e;
+        }
+
+        return redirect()
+        ->route('owner.products.index')
+        ->with(['message' => '商品登録しました。',
+        'status' => 'info']);
+    }
+
+★コード解説★
+
+productのcreate.blade.phpの入力情報を確認し、
+⇒バリデーションをかけている
+
+exists:shops,id
+secondary_categories,id
+images,id
+⇒テーブル名,対象のidを設定すると、
+　外部キーが存在するか判定をかけれる
+
+トランザクションで1回の処理でProductとstockを
+まとめて保存している
+
+//////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集◆
+
+ディレクトリ
+\resources\views\owner\products\index.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<x-thumbnail filename="{{$product->imageFirst->filename ?? ''}}" 
+type="products" />
+
+"{{$product->imageFirst->filename ?? ''}}"
+⇒一枚目の画像ははらないこともあるので、
+　マスタッシュで囲み、null合体演算子(??)
+  でnullか判定
+
+　また、変数ではなく文字列が渡されるため、
+　filenameの前の:を削除する
+
+productを登録した際、1枚目ではなく、二枚目で登録した場合、
+nullが返され、NOIMAGEの画像が反映される
+
+
+
+

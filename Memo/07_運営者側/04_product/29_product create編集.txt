@@ -1,6 +1,9 @@
 
 29_product create編集
 
+DatabaseSeeder内で 
+ProductSeederとStockSeederは一旦コメントアウト
+
 ◆テーブル編集◆
 
 ディレクトリ
