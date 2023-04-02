@@ -48,8 +48,8 @@
                       </div>
                       <div class="p-2 w-1/2 mx-auto">
                         <div class="relative flex justify-around">
-                          <div><input type="radio" name="type" value="#" class="mr-2" checked>追加</div>
-                          <div><input type="radio" name="type" value="#" class="mr-2" >削減</div>
+  <div><input type="radio" name="type" value="{{ \Constant::PRODUCT_LIST['add']}}" class="mr-2" checked>追加</div>
+  <div><input type="radio" name="type" value="{{ \Constant::PRODUCT_LIST['reduce']}}" class="mr-2" >削減</div>
                         </div>
                       </div>
                       <div class="p-2 w-1/2 mx-auto">
@@ -76,14 +76,14 @@
                           <label for="category" class="leading-7 text-sm text-gray-600">カテゴリー</label>
                           <select name="category" id="category" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
                             @foreach($categories as $category)
-                             <optgroup label="{{ $category->name }}">
+                              <optgroup label="{{ $category->name }}">
                               @foreach($category->secondary as $secondary)
                                 <option value="{{ $secondary->id}}" @if( $secondary->id === $product->secondary_category_id ) selected @endif >
-                                 {{ $secondary->name }}
+                                  {{ $secondary->name }}
                                 </option>
                               @endforeach
                             @endforeach
-                           </select>
+                            </select>
                           
                         </div>
                       </div>
@@ -104,6 +104,13 @@
                       </div>
                     </div>
                   </form>
+                  <form id="delete_{{$product->id}}" method="post" action="{{ route('owner.products.destroy', ['product' => $product->id ] )}}">
+                    @csrf
+                    @method('delete')
+                    <div class="p-2 w-full flex justify-around mt-32">
+                      <a href="#" data-id="{{ $product->id }}" onclick="deletePost(this)" class="text-white bg-red-400 border-0 py-2 px-4 focus:outline-none hover:bg-red-500 rounded ">削除する</a>                        
+                    </div>
+                  </form>                  
               </div>
           </div>
       </div>
@@ -123,7 +130,14 @@
         document.getElementById(imageName + '_hidden').value = imageId
         MicroModal.close(modal);
     }, )
-    })  
+    })
+
+    function deletePost(e) {
+        'use strict';
+        if (confirm('本当に削除してもいいですか?')) {
+        document.getElementById('delete_' + e.dataset.id).submit();
+        }
+    }    
 
   </script>
 

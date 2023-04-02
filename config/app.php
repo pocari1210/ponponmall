@@ -210,9 +210,10 @@ return [
     |
     */
 
-    'aliases' => Facade::defaultAliases()->merge([
-        // 'ExampleClass' => App\Example\ExampleClass::class,
-        'InterventionImage'=>Intervention\Image\Facades\Image::class
-    ])->toArray(),
+'aliases' => Facade::defaultAliases()->merge([
+    // 'ExampleClass' => App\Example\ExampleClass::class,
+    'InterventionImage'=>Intervention\Image\Facades\Image::class,
+    'Constant' => App\Constants\Common::class
+])->toArray(),
 
 ];

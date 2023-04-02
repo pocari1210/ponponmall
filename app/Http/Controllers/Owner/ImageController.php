@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Image;
+use App\Models\Product;
 use App\Services\ImageService;
 use App\Http\Requests\UploadImageRequest;
 
@@ -137,10 +138,37 @@ class ImageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        $image = Image::findOrFail($id);
-        $filePath = 'public/products/' . $image->filename;
+public function destroy($id)
+{
+    $image = Image::findOrFail($id);
+
+    $imageInProducts = Product::where('image1', $image->id)
+    ->orWhere('image2', $image->id)
+    ->orWhere('image3', $image->id)
+    ->orWhere('image4', $image->id)
+    ->get();
+
+    if($imageInProducts){
+        $imageInProducts->each(function($product) use($image){
+            if($product->image1 === $image->id){
+                $product->image1 = null;
+                $product->save();
+            }
+            if($product->image2 === $image->id){
+                $product->image2 = null;
+                $product->save();
+            }
+            if($product->image3 === $image->id){
+                $product->image3 = null;
+                $product->save();
+            }
+            if($product->image4 === $image->id){
+                $product->image4 = null;
+                $product->save();
+            }
+        });
+    }        
+    $filePath = 'public/products/' . $image->filename;
 
         if(Storage::exists($filePath)){
             Storage::delete($filePath);
