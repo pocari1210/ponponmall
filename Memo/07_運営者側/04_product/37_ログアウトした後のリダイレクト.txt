@@ -1,0 +1,13 @@
+
+37_ログアウトした後のリダイレクト
+
+ディレクトリ
+\app\Http\Controllers\Owner\Auth\AuthenticatedSessionController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+    public function destroy(Request $request): RedirectResponse
+    {
+　　　　↓↓↓編集↓↓↓
+        return redirect('/owner/login');
+    }

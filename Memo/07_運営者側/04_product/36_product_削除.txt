@@ -115,7 +115,8 @@ $imageInProducts->each(function($product) use($image)
 (function($product)でproductとするとコールバック関数として
 一つずつチェックができる
 
-
+コールバック関数の中でも、$imageををつかうため、
+use($image)とする
 
 
 
