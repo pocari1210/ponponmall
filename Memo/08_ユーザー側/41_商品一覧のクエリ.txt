@@ -1,0 +1,79 @@
+
+41_商品一覧のクエリ
+
+表示する条件 
+Shop ・・ is_selling = true 
+Product ・・ is_selling = true 
+Stockの合計 ・・ 1以上
+
+Stockの合計をグループ化->数量が1以上 
+SQLの場合
+ 
+SELECT `product_id`, sum(`quantity`) as `quantity` 
+FROM `t_stocks` 
+GROUP BY `product_id` 
+HAVING `quantity` >= 1 
+
+検索条件 
+Where・・groupByより前に条件指定 
+Having・・groupByの後に条件指定
+
+◆コントローラー編集◆
+
+ディレクトリ
+\app\Http\Controllers\User\ItemController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use Illuminate\Support\Facades\DB;
+
+public function index()
+{
+    $stocks = DB::table('t_stocks')
+    ->select('product_id', 
+    DB::raw('sum(quantity) as quantity'))
+    ->groupBy('product_id')
+    ->having('quantity', '>', 1);
+
+★コード解説★
+
+DB::rawとするとSQL分を直接書くことができる
+
+->groupBy('product_id')
+⇒groupByでproduct_idをグループ化している
+
+having('quantity', '>', 1);
+⇒habingで集計結果に対する絞り込みを行っている
+
+///////////////////////////////////////////////////////////////////////////
+
+$products = DB::table('products') 
+ ->joinSub($stocks, 'stock', function($join){ 
+ $join->on('products.id', '=', 'stock.product_id'); 
+ }) 
+ ->join('shops', 'products.shop_id', '=', 'shops.id') 
+ ->where('shops.is_selling', true) 
+ ->where('products.is_selling', true) 
+ ->get();
+
+★コード解説★
+
+joinSub($stocks, 'stock', function($join)
+⇒上で条件した$stocksを第一引数
+　第一引数で別の名前に変えたstockを第二引数
+　function($join)で、products.idと紐づける情報を記述している
+　
+join('shops', 'products.shop_id', '=', 'shops.id') 
+⇒productsとshopsを紐づけている
+
+ where('shops.is_selling', true) 
+ where('products.is_selling', true) 
+⇒whereで条件指定をしている
+
+
+
+
+
+
+
+
