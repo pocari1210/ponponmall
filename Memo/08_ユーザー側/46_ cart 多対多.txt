@@ -1,0 +1,100 @@
+
+46_ cart 多対多
+
+複数のユーザーが複数の商品を持てる ・・多対多 
+
+中間(pivot)テーブルをはさみ 1対多
+ 
+自動で生成するならproduct_user(アルファベット順) 
+
+今回はCartというモデルを作成し設定
+
+◆モデル作成◆
+
+コマンド
+php artisan make:model Cart -m
+
+ディレクトリ
+\app\Models\Cart.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+    protected $fillable = [
+        'user_id',
+        'product_id',
+        'quantity'
+    ];
+
+★コード解説★
+fillable設定
+
+///////////////////////////////////////////////////////////////////////
+
+◆テーブル編集◆
+
+ディレクトリ
+\database\migrations\作成日_create_carts_table.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+userとproductを外部キー制約する
+
+///////////////////////////////////////////////////////////////////////
+
+◆Userモデル編集◆
+
+ディレクトリ
+\app\Models\User.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use App\Models\Product;
+
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'carts')
+        ->withPivot(['id', 'quantity']); 
+    }
+
+★コード解説★
+belongsToManyは多対多のリレーションで使われる
+
+第二引数は、中間テーブル名を指定。
+
+withPivotで中間テーブル(carts)の必要な情報を取得している
+
+///////////////////////////////////////////////////////////////////////
+
+◆Productモデル編集◆
+
+ディレクトリ
+\app\Models\Product.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use App\Models\User;
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'carts')
+        ->withPivot(['id', 'quantity']);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
