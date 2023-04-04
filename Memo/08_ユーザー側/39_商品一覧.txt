@@ -44,7 +44,14 @@ php artisan make:controller User/ItemController
 ・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
 
 
+    public function __construct()
+    {
+        $this->middleware('auth:users');
+    }
 
+class ItemController extends Controller
+{
+    public function index()
 
 
 
