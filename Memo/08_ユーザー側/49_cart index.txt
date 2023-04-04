@@ -1,0 +1,51 @@
+
+49_cart index
+
+◆ルートの編集◆
+
+ディレクトリ
+\app\Http\Controllers\User\CartController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+Route::prefix('cart')->middleware('auth:users')->group(function(){
+　　↓↓↓追記↓↓↓
+    Route::get('/', [CartController::class, 'index'])->name('cart.index');
+   
+});
+
+////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\User\CartController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+public function index()
+{
+    $user = User::findOrFail(Auth::id());
+    $products = $user->products;
+    $totalPrice = 0;
+
+    foreach($products as $product){
+        $totalPrice += $product->price * $product->pivot->quantity;
+    }
+
+    return view('user.cart', 
+        compact('products', 'totalPrice'));
+}
+
+★コード解説★
+
+$user = User::findOrFail(Auth::id());
+⇒ログインしているユーザー情報を取得
+
+$products = $user->products;
+⇒ユーザーに紐づいているproductsを取得
+
+$totalPrice = 0;
+⇒初期値作成
+
+

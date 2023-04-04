@@ -32,12 +32,14 @@
 
 $itemInCart = Cart::where('product_id', $request->product_id)
 where('user_id', Auth::id())->first();
+
 ⇒カードに商品があるか確認
 　＆条件で両方満たしていたら$itemInCartにデータが入る
 
 if($itemInCart){
    $itemInCart->quantity += $request->quantity;
    $itemInCart->save();
+
 ⇒カートに商品があった場合、同じ商品であれば、
 　数量を追加し、保存する
 
