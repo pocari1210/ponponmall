@@ -1,0 +1,58 @@
+
+48_cart 保存処理
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\User\CartController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+    public function add(Request $request)
+    {
+        $itemInCart = Cart::where('product_id', $request->product_id)
+        ->where('user_id', Auth::id())->first();
+
+        if($itemInCart){
+            $itemInCart->quantity += $request->quantity;
+            $itemInCart->save();
+
+        } else {
+            Cart::create([
+                'user_id' => Auth::id(),
+                'product_id' => $request->product_id,
+                'quantity' => $request->quantity
+            ]);
+        }
+        
+        return redirect()->route('user.cart.index');
+    }
+
+★コード解説★
+
+$itemInCart = Cart::where('product_id', $request->product_id)
+where('user_id', Auth::id())->first();
+⇒カードに商品があるか確認
+　＆条件で両方満たしていたら$itemInCartにデータが入る
+
+if($itemInCart){
+   $itemInCart->quantity += $request->quantity;
+   $itemInCart->save();
+⇒カートに商品があった場合、同じ商品であれば、
+　数量を追加し、保存する
+
+} else {
+   Cart::create([
+      'user_id' => Auth::id(),
+      'product_id' => $request->product_id,
+      'quantity' => $request->quantity
+   ]);
+}
+⇒カートに商品がなければ、
+　新規でカートに商品を登録する
+
+
+
+
+
+

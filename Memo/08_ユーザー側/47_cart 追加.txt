@@ -1,0 +1,52 @@
+
+47_cart 追加
+
+◆ルート編集◆
+
+ディレクトリ
+\routes\user.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+Route::prefix('cart')->middleware('auth:users')->group(function(){
+ 	Route::post('add', [CartController::class, 'add'])->
+　　　　name('cart.add');
+});
+
+/////////////////////////////////////////////////////////////////////////
+
+◆コントローラー作成◆
+
+コマンド
+php artisan make:controller User/CartController
+
+◆ビュー編集◆
+
+ディレクトリ
+\resources\views\user\items\show.blade.php
+
+<form method="post" action="{{ route('user.cart.add')}}">
+   @csrf
+<div class="flex items-center">
+   <span class="mr-3">数量</span>
+
+～～～～～～～～～～～省略～～～～～～～～～～～～～～～～
+
+<input type="hidden" name="product_id" value="{{ $product->id}}">
+</form>
+
+★コード解説★
+
+数量の箇所をformで囲み、ボタンを押したら
+user.cart.addのページに遷移させる
+
+<input type="hidden" name="product_id" value="{{ $product->id}}">
+⇒productの情報も渡すため
+
+
+/////////////////////////////////////////////////////////////////////////
+
+
+
+
+

@@ -61,7 +61,7 @@ belongsToManyは多対多のリレーションで使われる
 
 第二引数は、中間テーブル名を指定。
 
-withPivotで中間テーブル(carts)の必要な情報を取得している
+withPivotで中間テーブル(carts)の必要なカラムを取得している
 
 ///////////////////////////////////////////////////////////////////////
 
@@ -79,21 +79,6 @@ use App\Models\User;
         return $this->belongsToMany(User::class, 'carts')
         ->withPivot(['id', 'quantity']);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -12,6 +12,7 @@ use App\Http\Controllers\User\Auth\PasswordResetLinkController;
 use App\Http\Controllers\User\Auth\RegisteredUserController;
 use App\Http\Controllers\User\Auth\VerifyEmailController;
 use App\Http\Controllers\User\ItemController;
+use App\Http\Controllers\User\CartController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -38,6 +39,11 @@ Route::middleware('auth:users')->group(function(){
     ->name('items.index');
     Route::get('show/{item}', [ItemController::class, 'show'])
     ->name('items.show');
+});
+
+Route::prefix('cart')->middleware('auth:users')->group(function(){
+    Route::post('add', [CartController::class, 'add'])->
+    name('cart.add');
 });
 
 Route::middleware('auth')->group(function () {
