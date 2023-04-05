@@ -77,9 +77,9 @@ class CartController extends Controller
                 ];
                 array_push($lineItems, $lineItem);    
             }
-            dd($lineItems);
+            //dd($lineItems);
         }
-        // dd($lineItems);
+
         foreach($products as $product){
             Stock::create([
                 'product_id' => $product->id,
@@ -94,8 +94,8 @@ class CartController extends Controller
             'payment_method_types' => ['card'],
             'line_items' => [$lineItems],
             'mode' => 'payment',
-            'success_url' => route('user.cart.success'),
-            'cancel_url' => route('user.cart.cancel'),
+            'success_url' => route('user.items.index'),
+            'cancel_url' => route('user.cart.index'),
         ]);
 
         $publicKey = env('STRIPE_PUBLIC_KEY');
