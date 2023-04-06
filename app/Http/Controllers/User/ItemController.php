@@ -29,25 +29,27 @@ class ItemController extends Controller
         });
     }
     
-public function index()
-{
-    $products = Product::availableItems()->get();
+    public function index(Request $request)
+    {
+        $products = Product::availableItems()
+        ->sortOrder($request->sort)
+        ->get();
 
-    return view('user.items.index',
-    compact('products'));
-}
-
-public function show($id)
-{
-    $product = Product::findOrFail($id);
-    $quantity = Stock::where('product_id', $product->id)
-    ->sum('quantity');
-
-    if($quantity > 9){
-        $quantity = 9;
+        return view('user.items.index',
+        compact('products'));
     }
 
-    return view('user.items.show', 
-    compact('product', 'quantity'));
-}    
+    public function show($id)
+    {
+        $product = Product::findOrFail($id);
+        $quantity = Stock::where('product_id', $product->id)
+        ->sum('quantity');
+
+        if($quantity > 9){
+            $quantity = 9;
+        }
+
+        return view('user.items.show', 
+        compact('product', 'quantity'));
+    }    
 }
