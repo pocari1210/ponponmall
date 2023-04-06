@@ -5,9 +5,11 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use InterventionImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\Product;
 use App\Models\Stock;
-use Illuminate\Support\Facades\DB;
+use App\Models\PrimaryCategory;
+
 
 class ItemController extends Controller
 {
@@ -31,12 +33,17 @@ class ItemController extends Controller
     
     public function index(Request $request)
     {
-        $products = Product::availableItems()
-        ->sortOrder($request->sort)
+
+        $categories = PrimaryCategory::with('secondary')
         ->get();
 
+        $products = Product::availableItems()
+        ->selectCategory($request->category ?? '0')
+        ->sortOrder($request->sort)
+        ->paginate($request->pagination ?? '20');
+
         return view('user.items.index',
-        compact('products'));
+        compact('categories','products'));
     }
 
     public function show($id)
