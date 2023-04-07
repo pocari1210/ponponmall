@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateImagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -20,7 +20,7 @@ return new class extends Migration
             ->onUpdate('cascade')
             ->onDelete('cascade');
             $table->string('filename');
-            $table->string('title')->nullable();            
+            $table->string('title')->nullable();
             $table->timestamps();
         });
     }
@@ -34,4 +34,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('images');
     }
-};
+}

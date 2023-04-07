@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateProductsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -19,8 +19,7 @@ return new class extends Migration
             $table->text('information');
             $table->unsignedInteger('price');
             $table->boolean('is_selling');
-            $table->integer('sort_order')
-            ->nullable();
+            $table->integer('sort_order')->nullable();
             $table->foreignId('shop_id')
             ->constrained()
             ->onUpdate('cascade')
@@ -52,4 +51,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('products');
     }
-};
+}

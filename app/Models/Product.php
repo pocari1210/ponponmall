@@ -41,22 +41,22 @@ class Product extends Model
 
     public function imageFirst()
     {
-        return $this->belongsTo(Image::class, 'image1', 'id');
+        return $this->belongsTo(Image::class,'image1','id');
     }
 
     public function imageSecond()
     {
-        return $this->belongsTo(Image::class, 'image2', 'id');
+        return $this->belongsTo(Image::class,'image2','id');
     }
 
     public function imageThird()
     {
-        return $this->belongsTo(Image::class, 'image3', 'id');
+        return $this->belongsTo(Image::class,'image3','id');
     }
 
     public function imageFourth()
     {
-        return $this->belongsTo(Image::class, 'image4', 'id');
+        return $this->belongsTo(Image::class,'image4','id');
     }    
     
     public function stock()
@@ -121,5 +121,28 @@ class Product extends Model
             return ;
         }
     }
+
+    public function scopeSearchKeyword($query, $keyword)
+    {
+        if(!is_null($keyword))
+        {
+            
+            $spaceConvert = mb_convert_kana($keyword,'s');
+
+            
+            $keywords = preg_split('/[\s]+/', $spaceConvert,-1,PREG_SPLIT_NO_EMPTY);
+
+            
+            foreach($keywords as $word)
+            {
+                $query->where('products.name','like','%'.$word.'%');
+            }
+
+            return $query;  
+
+        } else {
+            return;
+        }
+    }    
 
 }

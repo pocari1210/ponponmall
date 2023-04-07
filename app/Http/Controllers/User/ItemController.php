@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use InterventionImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\TestMail;
 use App\Models\Product;
 use App\Models\Stock;
 use App\Models\PrimaryCategory;
@@ -33,12 +34,15 @@ class ItemController extends Controller
     
     public function index(Request $request)
     {
+        Mail::to('pocari.design@gmail.com') //受信者の指定 
+        ->send(new TestMail());        
 
         $categories = PrimaryCategory::with('secondary')
         ->get();
 
         $products = Product::availableItems()
         ->selectCategory($request->category ?? '0')
+        ->searchKeyword($request->keyword)
         ->sortOrder($request->sort)
         ->paginate($request->pagination ?? '20');
 
