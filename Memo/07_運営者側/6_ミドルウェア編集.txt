@@ -1,5 +1,7 @@
 
-6_ミドルウェア編集
+6_コントローラーミドルウェア編集
+
+クロージャーで記述している
 
 edit, updateなど URLにパラメータを使う場合 
 URLの数値を直接変更すると 
@@ -38,5 +40,27 @@ URLの数値を直接変更すると
 
 
 ★コード解説★
+
+
+$this->middleware('auth:owners');
+⇒ownersかどうかチェックをかけている
+
+$request->route()->parameter('shop');
+⇒ルートファイルに記載したパラメーターを
+　取得している
+
+edit/{shop}の{shop}と紐づく
+
+※取得したパラメーターは文字列(string型)になる
+
+
+
+
+
+
+
+
+
+
 $id = $request->route()->parameter('shop');
 ⇒route情報の{{shop}}(キー)を取得している

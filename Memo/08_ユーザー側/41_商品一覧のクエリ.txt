@@ -1,6 +1,8 @@
 
 41_商品一覧のクエリ
 
+https://qiita.com/miriwo/items/3ddfa0b7b5724fcff934
+
 表示する条件 
 Shop ・・ is_selling = true 
 Product ・・ is_selling = true 
@@ -39,8 +41,11 @@ public function index()
 
 DB::rawとするとSQL分を直接書くことができる
 
+sum(quantity) as quantity
+⇒在庫の合計数をquantityという名称にしている
+
 ->groupBy('product_id')
-⇒groupByでproduct_idをグループ化している
+⇒groupByでproduct_idの重複を出さないようにしている
 
 having('quantity', '>', 1);
 ⇒habingで集計結果に対する絞り込みを行っている
@@ -74,14 +79,28 @@ $products = DB::table('products')
 joinSub($stocks, 'stock', function($join)
 ⇒上で条件した$stocksを第一引数
 　第一引数で別の名前に変えたstockを第二引数
-　function($join)で、products.idと紐づける情報を記述している
+　function($join)で、products.idとstock.product.id
+　を紐づけるを記述している
 　
 join('shops', 'products.shop_id', '=', 'shops.id') 
-⇒productsとshopsを紐づけている
+⇒products.shop_idとshops.idを紐づけている
+
+ //クエリ文が格納されている変数->
+　join('結合先テーブル名', '結合元テーブル名.結合するカラム名', '=', '結合先テーブル名.リンクするカラム名')
+
+imagesテーブルは、4回join句が使われているが、
+同じテーブルでの名称はしようできないため、
+asで名称を変えている
 
  where('shops.is_selling', true) 
  where('products.is_selling', true) 
-⇒whereで条件指定をしている
+⇒whereで条件指定をしている(販売中)
+
+->select
+⇒テーブルのカラム名(列名)をselectで指定
+　テーブルの中に同じカラム名がある場合、
+　どこのテーブルのカラムかわからなくなってしまうので、
+　「テーブル名.カラム名」で記述する
 
 ///////////////////////////////////////////////////////////////////////////
 
