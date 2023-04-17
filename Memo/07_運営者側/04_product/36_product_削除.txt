@@ -1,0 +1,127 @@
+
+36_product_削除
+
+◆コントローラの編集 ◆
+
+ディレクトリ
+\app\Http\Controllers\Owner\ProductController.php
+
+ImageController@destroy をコピーして調整
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+    public function destroy($id)
+    {
+        Product::findOrFail($id)->delete(); 
+
+        return redirect()
+        ->route('owner.products.index')
+        ->with(['message' => '商品を削除しました。',
+        'status' => 'alert']);
+    }
+
+/////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集◆
+
+ディレクトリ
+\resources\views\owner\products\edit.blade.php 
+
+images/edit.blade.php をコピーして調整
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  <form id="delete_{{$product->id}}" method="post" action="{{ route('owner.products.destroy', ['product' => $product->id ] )}}">
+    @csrf
+    @method('delete')
+    <div class="p-2 w-full flex justify-around mt-32">
+      <a href="#" data-id="{{ $product->id }}" 
+	onclick="deletePost(this)" 
+	class="text-white bg-red-400 border-0 py-2 px-4 focus:outline-none hover:bg-red-500 rounded ">
+	  削除する
+      </a>                        
+    </div>
+  </form>
+
+<script>
+    function deletePost(e) {
+        'use strict';
+        if (confirm('本当に削除してもいいですか?')) {
+        document.getElementById('delete_' + e.dataset.id).submit();
+        }
+    }
+</script>
+
+
+/////////////////////////////////////////////////////////////////////////////
+
+Image削除時の補足
+
+ディレクトリ
+\app\Http\Controllers\Owner\ImageController.php
+
+画像管理の画像を削除しようとすると
+SQLSTATE[23000]: Integrity constraint violation: 1451エラーが
+発生してしまう
+
+対策： Productのimage1～image4をnullに変更
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use App\Models\Product;
+
+public function destroy($id)
+{
+    $image = Image::findOrFail($id);
+
+↓↓↓↓↓↓追記↓↓↓↓↓↓
+
+    $imageInProducts = Product::where('image1', $image->id)
+    ->orWhere('image2', $image->id)
+    ->orWhere('image3', $image->id)
+    ->orWhere('image4', $image->id)
+    ->get();
+
+    if($imageInProducts){
+        $imageInProducts->each(function($product) use($image){
+            if($product->image1 === $image->id){
+                $product->image1 = null;
+                $product->save();
+            }
+            if($product->image2 === $image->id){
+                $product->image2 = null;
+                $product->save();
+            }
+            if($product->image3 === $image->id){
+                $product->image3 = null;
+                $product->save();
+            }
+            if($product->image4 === $image->id){
+                $product->image4 = null;
+                $product->save();
+            }
+        });
+    }
+
+　　↑↑↑↑↑↑追記↑↑↑↑↑↑
+        
+    $filePath = 'public/products/' . $image->filename;
+
+★コード解説★
+
+$imageInProducts->each(function($product) use($image)
+⇒eachをつかうとコレクションの中身を一つずつ処理ができる
+
+(function($product)でproductとするとコールバック関数として
+一つずつチェックができる
+
+
+
+
+
+
+
+
+
+
+            

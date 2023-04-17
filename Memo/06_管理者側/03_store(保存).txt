@@ -1,0 +1,69 @@
+
+03_store(保存)
+
+◆ビューの編集◆
+\resources\views\admin\owners\create.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+inputの中に下記のように、name属性をold()内に記載をする
+
+value="{{ old('name')}}"
+
+◆コード解説◆
+バリデーションがNGで戻った後も入力した内容を残すため
+
+//////////////////////////////////////////////////////////////////
+
+<x-input-error class="mb-4" :messages="$errors->all()"/>
+
+<form method="post" action="{{route('admin.owners.store')}}">
+ @csrf
+
+ <div class="p-2 flex justify-around w-full">
+    <button type="button" onclick="location.href='{{ route('admin.owners.index')}}'" class=" text-white bg-gray-300 border-0 py-2 px-8 focus:outline-none hover:bg-gray-600 rounded text-lg">戻る</button>
+    <button type="submit" class=" text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">登録する</button>
+ </div>
+
+◆コード解説◆
+
+x-input-errorでバリデーションエラーを表示
+
+formの直下に@csrfディレクティブを記載する必要がある。
+
+buttonが二つあるが、どちらかをsubmitにしないと動かないので、
+新規作成のボタンのタイプをsubmitとする
+
+//////////////////////////////////////////////////////////////////
+
+◆コントローラー編集◆
+\app\Http\Controllers\Admin\OwnersController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+    public function store(Request $request)
+    {
+        //$request->name;
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:owners',
+            'password' => 'required|string|confirmed|min:8',
+        ]);
+
+        Owner::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+
+        return redirect()
+        ->route('admin.owners.index')
+        ->with(['message' => 'オーナー登録を実施しました。',
+        'status' => 'info']);
+    }
+
+◆コード解説◆
+
+store(Request $request)をメソッドインジェクションといい、
+formに入力された値がRequestにはいり
+$requestでインスタンス化される。

@@ -1,0 +1,5 @@
+
+34_product update③更新処理
+
+ProductとStock同時更新するため 
+トランザクションをかけておく

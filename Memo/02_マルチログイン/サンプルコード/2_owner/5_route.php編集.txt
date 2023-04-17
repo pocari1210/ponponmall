@@ -1,0 +1,12 @@
+
+\routes\owner.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth:owners', 'verified'])->name('dashboard');
+
+auth:ownersとすることで、オーナーの権限をもってたら
+dashboard表示
+

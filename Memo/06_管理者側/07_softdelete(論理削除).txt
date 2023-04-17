@@ -1,0 +1,92 @@
+
+07_softdelete(論理削除)
+
+復元できる論理削除(soft delete)を準備
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+◆マイグレーション編集◆
+
+削除対象のデータのテーブルに下記を追記する
+
+ディレクトリ
+\database\migrations\作成日_create_owners_table.php
+
+    public function up()
+    {
+        Schema::create('owners', function (Blueprint $table) {
+            
+	$table->softDeletes(); //追記
+
+        });
+    }
+
+////////////////////////////////////////////////////////////////////////////////
+
+◆モデル編集◆
+
+ディレクトリ
+\app\Models\Owner.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+// 論理削除(softdelete)をインポート
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class Owner extends Authenticatable
+{
+    use HasFactory,SoftDeletes;
+
+////////////////////////////////////////////////////////////////////////////////
+
+◆routeの編集◆
+
+ディレクトリ
+\routes\admin.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+Route::prefix('expired-owners')->
+    middleware('auth:admin')->group(function(){
+        Route::get('index', [OwnersController::class, 'expiredOwnerIndex'])
+	->name('expired-owners.index');
+        Route::post('destroy/{owner}', [OwnersController::class, 'expiredOwnerDestroy'])
+	->name('expired-owners.destroy');
+});
+
+////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラー編集◆
+
+ディレクトリ
+\app\Http\Controllers\Admin\OwnersController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+    public function destroy($id)
+    {
+        Owner::findOrFail($id)->delete(); //ソフトデリート
+
+        return redirect()
+        ->route('admin.owners.index')
+        ->with(['message' => 'オーナー情報を削除しました。',
+        'status' => 'alert']);
+    }
+
+    public function expiredOwnerIndex(){
+        $expiredOwners = Owner::onlyTrashed()->get();
+        return view('admin.expired-owners', compact('expiredOwners'));
+    }
+    
+    public function expiredOwnerDestroy($id){
+        Owner::onlyTrashed()->findOrFail($id)->forceDelete();
+        return redirect()->route('admin.expired-owners.index');
+    }
+  
+※注意事項※
+
+forceDelete()とする場合、viewファイルで
+@method('delete')
+は不要なので注意する
+
+

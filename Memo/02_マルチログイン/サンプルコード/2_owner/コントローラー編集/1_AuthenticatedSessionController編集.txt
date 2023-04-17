@@ -1,0 +1,45 @@
+
+\app\Http\Controllers\Owner\AuthenticatedSessionController.php
+
+owner仕様に変更をする
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+//namespaceを合わせる必要がある
+
+namespace App\Http\Controllers\Owner\Auth;
+
+/////////////////////////////////////////////////////////////////////
+
+//prefexで頭にownerとつける必要がある
+
+    public function create(): View
+    {
+        return view('owner.auth.login');
+    }
+
+/////////////////////////////////////////////////////////////////////
+
+    public function store(LoginRequest $request): RedirectResponse
+    {
+        $request->authenticate();
+
+        $request->session()->regenerate();
+
+        //リダイレクトをOWNER_HOMEとする
+        return redirect()->intended(RouteServiceProvider::OWNER_HOME);
+    }
+
+/////////////////////////////////////////////////////////////////////
+
+    public function destroy(Request $request): RedirectResponse
+    {
+        // guardを書き換える
+        Auth::guard('owners')->logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect('/owner');
+

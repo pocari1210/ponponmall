@@ -1,0 +1,22 @@
+
+ディレクトリ
+\database\migrations\作成日_create_admins_table.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+    // テーブルの中身を\database\migrations\作成日_create_users_table.php
+　　// \database\migrations\作成日_create_users_table.php
+    // に合わせる
+
+    public function up()
+    {
+        Schema::create('admins', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->rememberToken();
+            $table->timestamps();
+        });
+    }

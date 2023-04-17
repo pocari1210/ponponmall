@@ -1,0 +1,91 @@
+
+\config\auth.php
+
+guardsとはLaravel標準の認証で
+リクエストごとにユーザーを認証する方法を定義する
+
+マニュアル
+https://readouble.com/laravel/9.x/ja/authentication.html
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+★Authentication Guards★
+
+    'guards' => [
+        'web' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
+        'users' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
+
+        'owners' => [
+            'driver' => 'session',
+            'provider' => 'owners',
+        ],
+
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'admin',
+        ],        
+    ],
+
+////////////////////////////////////////////////////////////////////
+
+★User Providers★
+
+    'providers' => [
+        'users' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class,
+        ],
+
+        'owners' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Owner::class,
+        ],
+
+        'admin' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Admin::class,
+        ],
+
+        // 'users' => [
+        //     'driver' => 'database',
+        //     'table' => 'users',
+        // ],
+    ],
+
+///////////////////////////////////////////////////////////////////
+
+★Resetting Passwords★
+
+database\migrationsに格納されているファイル名と
+tableに格納する名称を合わせる
+
+    'passwords' => [
+        'users' => [
+            'provider' => 'users',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        
+        'owners' => [
+            'provider' => 'owners',
+            'table' => 'owner_password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
+        'admin' => [
+            'provider' => 'admin',
+            'table' => 'admin_password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
+    ],
+

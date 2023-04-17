@@ -1,0 +1,82 @@
+
+27_product create(category)編集
+
+◆コントローラー編集◆
+
+ディレクトリ
+\app\Http\Controllers\Owner\ProductController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+ public function create()
+ {
+    $shops = Shop::where('owner_id', Auth::id())
+    ->select('id', 'name')
+    ->get();
+
+    $images = Image::where('owner_id', Auth::id())
+    ->select('id', 'title', 'filename')
+    ->orderBy('updated_at', 'desc')
+    ->get();
+
+    $categories = PrimaryCategory::with('secondary')
+    ->get();
+
+    return view('owner.products.create', 
+        compact('shops', 'images', 'categories'));
+    }
+
+★コード解説★
+
+Image::where('owner_id', Auth::id())
+⇒ログインをしているowner_idで条件指定
+
+->select('id', 'name')
+idとnameを選択している
+
+PrimaryCategory::with('secondary')
+⇒リレーション先を取得するのに、N+1問題があるため、
+　Eager Loadingとしてwithメソッドを用いて取得している
+
+\app\Models\PrimaryCategory.php
+
+public function 「secondary()」
+　　　　　　　　　　┗ここにあたる
+
+/////////////////////////////////////////////////////////////////////////
+
+◆ビュー編集◆
+
+ディレクトリ
+\resources\views\owner\products\create.blade.php(新規作成)
+
+    <select name="category" id="category" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+        @foreach($categories as $category)
+            <optgroup label="{{ $category->name }}">
+                @foreach($category->secondary as $secondary)
+                    <option value="{{ $secondary->id}}" >
+                    {{ $secondary->name }}
+                    </option>
+                @endforeach
+        @endforeach
+    </select>
+
+★コード解説★
+
+@foreach($categories as $category)
+⇒第一カテゴリーを$categoryとして一つずつ出力している
+
+<optgroup label="{{ $category->name }}">
+⇒第一カテゴリーのnameをラベルとして出力
+
+@foreach($category->secondary as $secondary)
+⇒第二カテゴリーを$secondaryとして一つずつ出力している
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,39 @@
+
+2_ロゴの設定
+
+publicフォルダに直接置く・・初期ファイル 
+storageフォルダ・・フォルダ内画像はgitHubにアップしない
+ 
+表側(public)から見れるようにリンク
+
+★コマンド★ 
+php artisan storage:link 
+
+\public\storage(新規作成)
+
+//////////////////////////////////////////////////////////////
+
+◆下記ファイルにロゴ画像を保存する◆
+\public\images(新規フォルダ作成)
+
+◆コンポーネントを編集する◆
+\resources\views\components\application-logo.blade.php
+
+<img src="{{ asset("images/logo.png") }}">
+
+assetというヘルプ関数を使用するとpublicを指定できる
+
+◆logoのサイズ調整◆
+\resources\views\layouts\guest.blade.php
+
+<div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
+   <div>
+　　　//widthを28に変更
+      <div class = "w-28">
+         <a href="/">
+            <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
+         </a>
+      </div>
+   </div>
+
+

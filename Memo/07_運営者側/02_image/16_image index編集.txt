@@ -1,0 +1,71 @@
+
+16_image index編集
+
+◆コンポーネント編集◆
+
+ディレクトリ
+\resources\views\components\thumbnail.blade.php
+
+@php
+if($type === 'shops'){
+  $path = 'storage/shops/';
+}
+if($type === 'products'){
+  $path = 'storage/products/';
+}
+@endphp
+
+※$type毎に$pathを分けている
+
+<div>
+  @if(empty($filename))
+    <img src="{{ asset('images/no_image.jpg')}}">
+  @else
+    <img src="{{ asset($path . $filename)}}">
+  @endif
+</div>
+
+※<img src="{{ asset($path . $filename)}}">とし、
+　$typeに紐づいたパスを$pathに代入している
+
+
+//////////////////////////////////////////////////////////////////////
+
+◆コントローラー編集◆
+
+ディレクトリ
+
+class ImageController extends Controller
+{
+    public function __construct()
+    {
+        $this->middleware('auth:owners');
+
+        $this->middleware(function ($request, $next) {
+
+            $id = $request->route()->parameter('image'); 
+            if(!is_null($id)){ 
+            $imagesOwnerId = Image::findOrFail($id)->owner->id;
+                $imageId = (int)$imagesOwnerId; 
+                if($imageId !== Auth::id()){ 
+                    abort(404);
+                }
+            }
+            return $next($request);
+        });
+    } 
+
+    public function index()
+    {
+        $images = Image::where('owner_id', Auth::id())
+        ->orderBy('updated_at', 'desc')
+        ->paginate(20);
+
+        return view('owner.images.index', 
+        compact('images'));
+    }
+
+★コード解説★
+
+orderBy('updated_at', 'desc')
+⇒更新した順番に降順にしている（最新順にする）

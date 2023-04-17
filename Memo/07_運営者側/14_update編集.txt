@@ -1,0 +1,74 @@
+
+14_update編集
+
+◆コントローラーの編集◆
+\app\Http\Controllers\Owner\Shopcontroller.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+    public function update(UploadImageRequest $request, $id)
+    {
+
+        $request->validate([
+            'name' => 'required|string|max:50',
+            'information' => 'required|string|max:1000',
+            'is_selling' => 'required',
+        ]);
+
+※validate関数で入力された情報の整合性を確認している。
+
+        $imageFile = $request->image;
+        if(!is_null($imageFile) && $imageFile->isValid() ){
+            ToStore = ImageService::upload($imageFile,'shops');
+        }
+
+        $shop = Shop::findOrFail($id);
+        $shop->name = $request->name;
+        $shop->information = $request->information;
+        $shop->is_selling = $request->is_selling;
+        if(!is_null($imageFile) && $imageFile->isValid()){
+            $shop->filename = ToStore;
+        }
+
+$shop = Shop::findOrFail($id);
+⇒ShopのID情報を取得し、$shopに代入
+
+$shop->name = $request->name;
+⇒$request->nameでformから渡されたname情報を
+　$shop->nameに代入
+
+if(!is_null($imageFile) && $imageFile->isValid())
+⇒$imageFileが空でないかつバリデーションに問題がなかったら
+　ToStore;（画像のファイル名）を$shop->filenameに代入
+
+        $shop->save(); 
+
+$shop->save()
+⇒保存
+
+        return redirect()
+        ->route('owner.shops.index')
+        ->with(['message' => '店舗情報を更新しました。',
+        'status' => 'info']);      
+
+    }
+
+///////////////////////////////////////////////////////////////////////
+
+◆view側の編集◆
+
+ディレクトリ
+\resources\views\owner\shops\index.blade.php
+
+editで編集した画像をアップロードさせる
+
+<x-thumbnail :filename="$shop->filename" />
+
+★コード解説★
+:filename(属性)に$shop->filenameを代入
+$shop->filenameは""で囲む必要がある
+
+
+
+
+

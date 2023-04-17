@@ -1,0 +1,64 @@
+
+32_product update(フォームリクエスト)
+
+Products/edit.blade.php に @method(ʻputʼ) 追加 
+(リソースコントローラのため) 
+
+バリデーション項目が多いのでフォームリクエストを作成し分離 
+php artisan make:request ProductRequest
+
+
+◆フォームリクエスト編集◆
+
+ディレクトリ
+\app\Http\Requests\ProductRequest.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+ProductControllerのstoreメソッドのバリデーションをきりとり、
+rulesのなかに貼り付ける
+
+//////////////////////////////////////////////////////////////////////////
+
+◆コントローラー編集◆
+
+ディレクトリ
+\app\Http\Controllers\Owner\ProductController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use App\Http\Requests\ProductRequest;
+
+    public function store(ProductRequest $request)
+    {
+
+    public function update(ProductRequest $request, $id)
+    {
+        $request->validate([
+            'current_quantity' => 'required|integer',
+        ]);
+
+★コード解説★
+ProductRequestをインポートし、
+storeメソッドとupdateメソッドの第一引数を
+RequestからProductRequestに変更する
+
+悪意のあるユーザーが開発ツールで書き換えることもあるので、
+current_quantityをバリデートする。
+（ProductRequestに追加でバリデーションをかけていることになる。
+
+///////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,157 @@
+
+26_stock 編集
+
+在庫管理・履歴用のテーブル 
+マスターテーブル(参照用), トランザクションテーブル(処理用)
+ 
+php artisan make:model Stock -m 
+
+Product モデルから hasMany 
+Stockモデル protected $table = ʼt_stocksʼ; 
+
+マイグレーション 
+Schema::create(ʼt_stocks', $table->tinyInteger(ʻtypeʼ); 
+1・・入庫 2・・出庫 
+Upメソッド、downメソッドともにテーブル名変更
+
+/////////////////////////////////////////////////////////////////////
+
+◆親モデルの編集(Product・主テーブル)◆
+
+ディレクトリ
+\app\Models\Product.php
+
+ProductとStockは1対多の関係
+主テーブルから従テーブルを取得する
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use App\Models\Stock;
+
+    public function stock()
+    {
+        return $this->hasMany(Stock::class);
+    }
+
+//////////////////////////////////////////////////////////////////////////////
+
+◆子モデルの編集(Stock・従テーブル)◆
+
+ディレクトリ
+\app\Models\Stock.php
+
+テーブル名を変える際は、model側でprotected $tableで
+指定する必要がある
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+class Stock extends Model
+{
+    use HasFactory;
+
+    protected $table = 't_stocks';
+}
+
+★コード解説★
+
+protected $table = 't_stocks';
+⇒これがないとseederする際、読み込まれない
+
+//////////////////////////////////////////////////////////////////////////////////
+
+◆マイグレーション編集◆
+
+ディレクトリ
+\database\migrations\作成日_create_stocks_table.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+    public function up()
+    {
+        Schema::create('t_stocks', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('product_id')
+            ->constrained()
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
+            $table->tinyInteger('type');
+            $table->integer('quantity');
+            $table->timestamps();
+        });
+    }
+
+    public function down()
+    {
+        Schema::dropIfExists('t_stocks');
+    }
+
+
+★コード解説★
+
+テーブル名を't_stocks'に変更
+
+$table->foreignId('product_id')
+⇒productを外部キー制約とし、商品が更新や削除をしたら
+　その都度更新される
+
+//////////////////////////////////////////////////////////////////////////////////
+
+◆シーダー編集◆
+
+php artisan make:seed StockSeeder
+
+ディレクトリ
+\database\seeders\StockSeeder.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use Illuminate\Support\Facades\DB;
+
+    public function run()
+    {
+        DB::table('t_stocks')->insert([
+            [
+                'product_id' => 1,
+                'type' => 1,
+                'quantity' => 5,
+            ],
+            [
+                'product_id' => 1,
+                'type' => 1,
+                'quantity' => -2,
+            ]]);
+    }
+
+//////////////////////////////////////////////////////////////////////////////////
+
+◆データベースシーダー編集◆
+
+ディレクトリ
+\database\seeders\DatabaseSeeder.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+    public function run()
+    {
+        $this->call([
+            StockSeeder::class,
+        ]);
+    }
+
+////////////////////////////////////////////////////////////////////////////
+
+◆tinkerで確認◆
+
+合計を計算 
+
+下記コマンドで確認
+
+php artisan tinker
+
+$product = new App\Models\Product 
+$product::find(1)->stock->sum('quantity')
+
+
+
+
+

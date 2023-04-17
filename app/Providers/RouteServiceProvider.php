@@ -17,13 +17,20 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    public const HOME = '/home';
+
+    // ホームURLを設定
+    // 定数の場合、全て大文字にするルールがある
+    public const HOME = '/user/dashboard';
+    public const OWNER_HOME = '/owner/dashboard';
+    public const ADMIN_HOME = '/admin/dashboard';
 
     /**
      * Define your route model bindings, pattern filters, and other route configuration.
      *
      * @return void
      */
+
+    // サービスプロバイダが読み込まれた後に実行される
     public function boot()
     {
         $this->configureRateLimiting();
@@ -33,8 +40,23 @@ class RouteServiceProvider extends ServiceProvider
                 ->prefix('api')
                 ->group(base_path('routes/api.php'));
 
+                Route::prefix('admin')
+                ->as('admin.')
+                ->middleware('web')
+                ->group(base_path('routes/admin.php'));
+
+            Route::prefix('owner')
+                ->as('owner.')
+                ->middleware('web')
+                ->group(base_path('routes/owner.php'));
+
+            Route::prefix('user')
+                ->as('user.')
+                ->middleware('web')
+                ->group(base_path('routes/user.php'));
+
             Route::middleware('web')
-                ->group(base_path('routes/web.php'));
+            ->group(base_path('routes/web.php'));                
         });
     }
 

@@ -1,0 +1,200 @@
+
+22_Category モデル, マイグレーション
+
+一つのカテゴリー(第一カテゴリー)に対し、
+複数のカテゴリー(第二カテゴリーをもつ
+1対多の関係とする
+
+下記コマンドで、モデルを作成する
+
+★モデル★
+
+第一カテゴリー
+php artisan make:model PrimaryCategory -m
+
+第二カテゴリー
+php artisan make:model SecondaryCategory
+
+//////////////////////////////////////////////////////////////////////////////
+
+◆親モデルの編集(第一カテゴリー・主テーブル)◆
+
+ディレクトリ
+\app\Models\PrimaryCategory.php
+
+主テーブルから従テーブルを取得する
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use App\Models\SecondaryCategory;
+
+class PrimaryCategory extends Model
+{
+    use HasFactory;
+
+    public function secondary()
+    {
+        return $this->hasMany(SecondaryCategory::class);
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+◆子モデルの編集(第二カテゴリー・従テーブル)◆
+
+ディレクトリ
+\app\Models\SecondaryCategory.php
+
+従テーブルから主テーブルを取得する
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use App\Models\PrimaryCategory;
+
+class SecondaryCategory extends Model
+{
+    use HasFactory;
+
+    public function primary()
+    {
+        return $this->belongsTo(PrimaryCategory::class);
+    }
+
+//////////////////////////////////////////////////////////////////////////
+
+◆マイグレーション編集◆
+
+ディレクトリ
+\database\migrations\作成日_create_categories_table.php
+
+一つのテーブルにまとめるためディレクトリに編集
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+    public function up()
+    {
+        Schema::create('primary_categories', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->integer('sort_order');            
+            $table->timestamps();
+        });
+
+        Schema::create('secondary_categories', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->integer('sort_order');
+            $table->foreignId('primary_category_id')
+            ->constrained();
+            $table->timestamps();
+        });        
+    }
+
+    public function down()
+    {
+        Schema::dropIfExists('secondary_categories');        
+        Schema::dropIfExists('primary_categories');
+    }
+
+★コード解説★
+
+外部キー制約をかけているほうを先に消さないと外部キーエラーが
+出てしまうので、downメソッドはsecondary_categoriesを
+上に記述する
+
+カテゴリーは削除することはないので、cascadeは不要
+
+///////////////////////////////////////////////////////////////////////////////
+
+◆シーダー編集◆
+
+下記コードでシーダーファイルを作成する
+
+php artisan make:seed CategorySeeder
+
+ディレクトリ
+\database\seeders\CategorySeeder.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use Illuminate\Support\Facades\DB;
+
+    public function run()
+    {
+        DB::table('primary_categories')->insert([
+            [
+                'name' => 'パソコン関連',
+                'sort_order' => 1,
+            ],
+            [
+                'name' => 'ギフト',
+                'sort_order' => 2,
+            ],
+            [
+                'name' => 'サプリメント',
+                'sort_order' => 3,
+            ],
+            ]);
+
+        DB::table('secondary_categories')->insert([
+            [
+                'name' => 'ゲーミングPC',
+                'sort_order' => 1,
+                'primary_category_id' => 1
+            ],
+            [
+                'name' => 'ビジネスノートパソコン',
+                'sort_order' => 2,
+                'primary_category_id' => 1
+            ],
+            [
+                'name' => 'クリエイターパソコン',
+                'sort_order' => 3,
+                'primary_category_id' => 1
+            ],
+            [
+                'name' => 'ギフトセット',
+                'sort_order' => 4,
+                'primary_category_id' => 2
+            ],
+            [
+                'name' => 'リンゴ',
+                'sort_order' => 5,
+                'primary_category_id' => 2
+            ],
+            [
+                'name' => 'プロテイン',
+                'sort_order' => 6,
+                'primary_category_id' => 3
+            ],
+            [
+                'name' => 'BCAA',
+                'sort_order' => 7,
+                'primary_category_id' => 3
+            ],
+
+      ]);
+
+////////////////////////////////////////////////////////////////////////
+
+◆DatabaseSeeder追記◆
+
+ディレクトリ
+\database\seeders\DatabaseSeeder.php
+
+
+    public function run()
+    {
+        $this->call([
+            CategorySeeder::class
+        ]);
+    }
+
+念の為 php artisan tinker で確認 
+
+$category = new App\Models\PrimaryCategory; 
+$category::findOrFail(1)->secondary;
+
+カテゴリーが表示されれば 
+リレーションOK
+
