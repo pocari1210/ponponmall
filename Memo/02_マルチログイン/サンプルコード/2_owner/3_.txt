@@ -1,6 +1,0 @@
-
-
-下記コマンドにてテーブルを作成する
-
-★コマンド★
-php artisan make:migration create_admin_password_resets
