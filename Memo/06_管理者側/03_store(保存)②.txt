@@ -1,5 +1,0 @@
-
-◆フラッシュメッセージ(新規コンポーネント作成)◆
-
-ディレクトリ
-\resources\views\components\flash-message.blade.php

@@ -1,7 +1,0 @@
-
-7_カスタムエラーページ
-
-404エラーなどのエラーページを編集する場合、
-下記コマンドを実行する
-
-php artisan vendor:publish --tag=laravel-errors

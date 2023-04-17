@@ -20,7 +20,7 @@ class RouteServiceProvider extends ServiceProvider
 
     // ホームURLを設定
     // 定数の場合、全て大文字にするルールがある
-    public const HOME = '/user/dashboard';
+    public const HOME = '/';
     public const OWNER_HOME = '/owner/dashboard';
     public const ADMIN_HOME = '/admin/dashboard';
 

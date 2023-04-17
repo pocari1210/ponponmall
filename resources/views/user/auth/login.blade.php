@@ -5,6 +5,8 @@
     <form method="POST" action="{{ route('user.login') }}">
         @csrf
 
+        <h1 class ="flex justify-center">会員様ログインページ</h1>        
+
         <!-- Email Address -->
         <div>
             <x-input-label for="email" :value="__('Email')" />
