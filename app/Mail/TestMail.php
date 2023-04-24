@@ -28,12 +28,12 @@ class TestMail extends Mailable
      *
      * @return \Illuminate\Mail\Mailables\Envelope
      */
-public function envelope()
-{
-    return new Envelope(
-        subject: 'テスト送信完了',
-    );
-}
+    public function envelope()
+    {
+        return new Envelope(
+            subject: 'テスト送信完了',
+        );
+    }
 
     /**
      * Get the message content definition.
@@ -43,7 +43,6 @@ public function envelope()
     public function content()
     {
         return new Content(
-            
             view: 'emails.test',
         );
     }

@@ -1,6 +1,0 @@
-
-        $c_test = collect([
-            'name' => 'てすと'
-        ]);
-        
-        dd($c_test);
