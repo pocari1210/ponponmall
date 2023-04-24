@@ -11,7 +11,6 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
-use App\Http\Controllers\NologinItemController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +28,7 @@ use App\Http\Controllers\NologinItemController;
 
 Route::get('/', 'App\Http\Controllers\NologinItemController@index')->name('item.index');
 Route::get('/show/{item}', 'App\Http\Controllers\NologinItemController@show')->name('item.show');
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
