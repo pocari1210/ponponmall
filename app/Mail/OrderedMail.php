@@ -9,30 +9,30 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class ThanksMail extends Mailable
+class OrderedMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $products;
+    public $product;
     public $user;
 
-    public function __construct($products, $user)
+    public function __construct($product, $user)
     {
-        $this->products = $products;
+        $this->product = $product;
         $this->user = $user;
     }
 
     public function envelope()
     {
         return new Envelope(
-            subject: 'ご購入ありがとうございます',
+            subject: '商品が注文されました。',
         );
     }
 
     public function content()
     {
         return new Content(
-            view: 'emails.thanks',
+            view: 'emails.ordered',
         );
     }
 

@@ -1,44 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
-use App\Jobs\SendThanksMail;
-use App\Mail\ThanksMail;
-use App\Mail\TestMail;
 use App\Models\Product;
 use App\Models\Stock;
 use App\Models\PrimaryCategory;
 
 
-class ItemController extends Controller
+class NologinItemController extends Controller
 {
-
-    public function __construct()
-    {
-        $this->middleware('auth:users');
-
-        $this->middleware(function ($request, $next) {
-
-            $id = $request->route()->parameter('item'); 
-            if(!is_null($id)){ 
-            $itemId = Product::availableItems()->where('products.id', $id)->exists();
-                if(!$itemId){ 
-                    abort(404);
-                }
-            }
-            return $next($request);
-        });
-    }
     
     public function index(Request $request)
     {
-
-        //非同期に送信
-        // SendThanksMail::dispatch();
 
         $categories = PrimaryCategory::with('secondary')
         ->get();
@@ -49,7 +25,7 @@ class ItemController extends Controller
         ->sortOrder($request->sort)
         ->paginate($request->pagination ?? '20');
 
-        return view('user.items.index',
+        return view('welcome',
         compact('categories','products'));
     }
 
@@ -63,7 +39,8 @@ class ItemController extends Controller
             $quantity = 9;
         }
 
-        return view('user.items.show', 
+        return view('item.show', 
         compact('product', 'quantity'));
-    }    
+    }
+
 }
