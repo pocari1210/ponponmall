@@ -45,6 +45,9 @@ class User extends Authenticatable
 
     public function products()
     {
+        // ★中間テーブル★
+        // belongsToManyは多対多のリレーションで使われる
+        // withPivotで中間テーブル(carts)の必要なカラムを取得        
         return $this->belongsToMany(Product::class, 'carts')
         ->withPivot(['id', 'quantity']); 
     }

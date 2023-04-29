@@ -47,6 +47,7 @@ public function store(LoginRequest $request): RedirectResponse
 
         $request->session()->regenerateToken();
 
+        // ログアウトした後の遷移先指定
         return redirect('/owner/login');
     }
 }

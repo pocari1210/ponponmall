@@ -18,7 +18,7 @@ class RouteServiceProvider extends ServiceProvider
      * @var string
      */
 
-    // ホームURLを設定
+    // ホームURLを設定(ログインをした後の遷移先を設定)
     // 定数の場合、全て大文字にするルールがある
     public const HOME = '/user';
     public const OWNER_HOME = '/owner';

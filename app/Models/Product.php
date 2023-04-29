@@ -39,6 +39,9 @@ class Product extends Model
         return $this->belongsTo(SecondaryCategory::class, 'secondary_category_id');
     }
 
+
+    // カラム名とテーブル名は同じ名称にできないため、
+    // imageFirstとする
     public function imageFirst()
     {
         return $this->belongsTo(Image::class,'image1','id');
@@ -46,7 +49,11 @@ class Product extends Model
 
     public function imageSecond()
     {
+
         return $this->belongsTo(Image::class,'image2','id');
+        // ⇒image1とidをつけていない場合、Laravel側で推測ができないため、
+        // 第三引数をimageモデルのidとし、紐づけている
+        
     }
 
     public function imageThird()
@@ -66,25 +73,43 @@ class Product extends Model
 
     public function users()
     {
+        // ★中間テーブル★
+        // belongsToManyは多対多のリレーションで使われる
+        // withPivotで中間テーブル(carts)の必要なカラムを取得
         return $this->belongsToMany(User::class, 'carts')
         ->withPivot(['id', 'quantity']);
     }
 
+    // ★商品を表示する条件を絞り込む★
+    // shopが販売中で在庫がある商品を表示させる
     public function scopeAvailableItems($query)
     {
         $stocks = DB::table('t_stocks')
         ->select('product_id', 
+
+        // 在庫の合計数をquantityとする
         DB::raw('sum(quantity) as quantity'))
+
+        // product_idの重複を出さないようにしている
         ->groupBy('product_id')
+
+        // 集計結果に対する絞り込みを行っている
         ->having('quantity', '>', 1);
 
         return $query
+
+        // products.idとstock.product.id
+        // を紐づける(テーブル結合)
         ->joinSub($stocks, 'stock', function($join){
             $join->on('products.id', '=', 'stock.product_id');
         })
+
+        // join句でproductsと紐づけている
         ->join('shops', 'products.shop_id', '=', 'shops.id')
         ->join('secondary_categories', 'products.secondary_category_id', '=', 'secondary_categories.id')
         ->join('images as image1', 'products.image1', '=', 'image1.id')
+
+        // whereで条件指定をしている(販売中)
         ->where('shops.is_selling', true)
         ->where('products.is_selling', true)
         ->select('products.id as id', 'products.name as name', 'products.price'

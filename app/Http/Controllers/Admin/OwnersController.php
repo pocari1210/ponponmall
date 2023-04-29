@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use App\Models\Owner; // Eloquent エロクアント
 use App\Models\Shop;
@@ -10,17 +11,9 @@ use Illuminate\Support\Facades\DB; // QueryBuilder クエリビルダ
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Throwable; 
-use Illuminate\Support\Facades\Log;
-
-
 
 class OwnersController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
 
     public function __construct()
     {
@@ -29,20 +22,6 @@ class OwnersController extends Controller
 
     public function index()
     {
-
-        //dd('テスト');
-
-        // $e_all = Owner::all();
-        // // dd($e_all);
-
-        // $q_get = DB::table('owners')->select('name','created_at')
-        // ->get();
-
-        // $c_test = collect([
-        //     'name' => 'てすと'
-        // ]);
-        
-        // // dd($c_test);
 
         $owners = Owner::select('id','name', 'email', 'created_at')
         ->paginate(3);
@@ -53,22 +32,11 @@ class OwnersController extends Controller
         compact('owners'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('admin.owners.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -76,6 +44,10 @@ class OwnersController extends Controller
             'email' => 'required|string|email|max:255|unique:owners',
             'password' => 'required|string|confirmed|min:8',
         ]);
+
+        // ★トランザクション★
+        // ownerを作った時点でshopも作成をする
+        // エラーが出た場合、Throwableで例外取得
 
         try{
             DB::transaction(function () use($request) {
@@ -105,37 +77,21 @@ class OwnersController extends Controller
         'status' => 'info']);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
+
+        // Ownerモデルのidを取得、なければ404エラーを返す
         $owner = Owner::findOrFail($id);
+
         return view('admin.owners.edit',
         compact('owner'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         $owner = Owner::findOrFail($id);
@@ -150,12 +106,6 @@ class OwnersController extends Controller
         'status' => 'info']);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         Owner::findOrFail($id)->delete(); //ソフトデリート
@@ -166,7 +116,10 @@ class OwnersController extends Controller
         'status' => 'alert']);
     }
 
+    
     public function expiredOwnerIndex(){
+
+        // ソフトデリートしたもののみを表示させる
         $expiredOwners = Owner::onlyTrashed()->get();
 
         return view('admin.expired-owners', 
@@ -174,11 +127,22 @@ class OwnersController extends Controller
     }
     
     public function expiredOwnerDestroy($id){
+
+        // ソフトデリートしたものを、完全に削除する
         Owner::onlyTrashed()->findOrFail($id)->forceDelete();
         
         return redirect()
         ->route('admin.expired-owners.index')
         ->with(['message' => 'SHOPを削除しました。',
         'status' => 'alert']);
+    }
+
+    public function restoreExpiredOwner($id){
+        $restoredOwner=Owner::onlyTrashed()->findOrFail($id)->restore();
+        
+        return redirect()->route('admin.owners.index',
+        compact('restoredOwner'))
+        ->with(['message' => 'SHOPを復元しました。',
+        'status' => 'info']);
     }
 }

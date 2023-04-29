@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 class RedirectIfAuthenticated
 {
 
+    // \config\auth.phpのAuthentication Guardsで
+    // 設定した変数と合わせる必要がある
     private const GUARD_USER = 'users';
     private const GUARD_OWNER = 'owners';
     private const GUARD_ADMIN = 'admin';
@@ -31,6 +33,9 @@ class RedirectIfAuthenticated
         //         return redirect(RouteServiceProvider::HOME);
         //     }
         // }
+
+        // ログイン済みユーザーがアクセスしてきたら
+        // リダイレクトの処理を行う
 
         if(Auth::guard(self::GUARD_USER)->check() && $request->routeIs('user.*')){
             return redirect(RouteServiceProvider::HOME);

@@ -5348,6 +5348,7 @@ window.axios = (axios__WEBPACK_IMPORTED_MODULE_1___default());
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
  // es6 module
 
+// モーダルが開いている時にスクロールをさせない
 micromodal__WEBPACK_IMPORTED_MODULE_2__["default"].init({
   disableScroll: true
 });

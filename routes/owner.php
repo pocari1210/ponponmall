@@ -38,6 +38,7 @@ Route::prefix('shops')->
         Route::post('update/{shop}', [ShopController::class, 'update'])->name('shops.update');
 });
 
+// コントローラーのshowメソッドが不要なのでexceptを記述
 Route::resource('images', ImageController::class)
 ->middleware('auth:owners')->except(['show']);
 

@@ -14,6 +14,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 import MicroModal from 'micromodal';  // es6 module
 
+// モーダルが開いている時にスクロールをさせない
 MicroModal.init({
     disableScroll: true
 });

@@ -34,6 +34,7 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth:users', 'verified'])->name('dashboard');
 
+// ('auth:users'):userとしてログインした場合のルートを作成
 Route::middleware('auth:users')->group(function(){
     Route::get('/', [ItemController::class, 'index'])
     ->name('items.index');

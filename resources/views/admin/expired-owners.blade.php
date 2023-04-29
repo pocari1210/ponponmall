@@ -21,14 +21,24 @@
                             <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tl rounded-bl">名前</th>
                             <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">メールアドレス</th>
                             <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">期限が切れた日</th>                            
-                            <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tr rounded-br"></th></thead>
+                            <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tr rounded-br"></th>
+                            <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tr rounded-br"></th>
+                        </thead>
                         <tbody>
                           @foreach ($expiredOwners as $owner)
                           <tr>
                             <td class="px-4 py-3">{{ $owner->name }}</td>
                             <td class="px-4 py-3">{{ $owner->email }}</td>
                             <td class="px-4 py-3">{{ $owner->deleted_at->diffForHumans() }}</td>
-                            
+
+                            <form method = "post" action = "{{ route('admin.expired-owners.restore' ,['owner' => $owner->id] )}}">
+                            @csrf
+                              <td class="md:px-4 py-3">
+                              <button type ="submit" data-id="{{ $owner->id }}" class=" text-white bg-blue-400 border-0  py-2 px-4 focus:outline-none hover:bg-pink-500 rounded ">
+                                復旧
+                              </button>
+                            </form>
+                              
                             <form id="delete_{{$owner->id}}" method="post" action="{{ route('admin.expired-owners.destroy', ['owner' => $owner->id ] )}}">
                               @csrf
                               <td class="px-4 py-3">

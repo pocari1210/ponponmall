@@ -41,6 +41,7 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
+        // ログインしたら、変数の設定をする
         if($this->routeIs('owner.*')){
             $guard = 'owners';
         } elseif($this->routeIs('admin.*')){
@@ -49,6 +50,7 @@ class LoginRequest extends FormRequest
             $guard = 'users';
         }
 
+        //guardの情報を追記する
         if (! Auth::guard($guard)->attempt($this->only('email', 'password'), $this->filled('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
