@@ -15,6 +15,7 @@ class Shopcontroller extends Controller
 {
     public function __construct()
     {
+        // ownersでログインしているかチェックをしている
         $this->middleware('auth:owners');
 
         $this->middleware(function ($request, $next) {
@@ -36,6 +37,7 @@ class Shopcontroller extends Controller
 
     public function index()
     {
+        // ログインしているIDの情報を取得
         $shops = Shop::where('owner_id', Auth::id())->get();
 
         return view('owner.shops.index', 
@@ -44,8 +46,7 @@ class Shopcontroller extends Controller
 
     public function edit($id)
     {
-        // dd(Shop::findOrFail($id));
-
+        // Shopモデルからid情報取得
         $shop = Shop::findOrFail($id);
 
         return view('owner.shops.edit', 
@@ -62,6 +63,8 @@ class Shopcontroller extends Controller
             'is_selling' => 'required',
         ]);
 
+        // formからわたって来たimageをバリデートし、
+        // $imageFile(画像名)をshopsフォルダ配下に保存する
         $imageFile = $request->image;
         if(!is_null($imageFile) && $imageFile->isValid() ){
             $fileNameToStore = ImageService::upload($imageFile,'shops');

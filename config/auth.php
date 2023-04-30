@@ -35,6 +35,10 @@ return [
     |
     */
 
+    
+    // ★guards設定★
+    // リクエストごとにユーザーを認証する
+
     'guards' => [
         'web' => [
             'driver' => 'session',

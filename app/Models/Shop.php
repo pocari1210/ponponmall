@@ -19,6 +19,7 @@ class Shop extends Model
         'is_selling'
     ];
 
+    // 従テーブル(shop)から主テーブル(owner)取得する
     public function owner() 
     { 
         return $this->belongsTo(Owner::class); 

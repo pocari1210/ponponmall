@@ -50,6 +50,7 @@ class Owner extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
     
+    // 主テーブル(owner)から従テーブル(shop)を取得する
     public function shop() 
     { 
         return $this->hasOne(Shop::class); 

@@ -36,8 +36,11 @@ class ProductController extends Controller
     
     public function index()
     {
-        
+        // Eager Loading(N + 1問題の対策)
+        // リレーション先の情報を取得 
         $ownerInfo = Owner::with('shop.product.imageFirst')
+
+        // ログインしているOwnerの情報を取得
         ->where('id', Auth::id())->get();
 
         return view('owner.products.index',
@@ -45,14 +48,13 @@ class ProductController extends Controller
     
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
+
+        // ログインをしているowner_idで条件指定
         $shops = Shop::where('owner_id', Auth::id())
+
+        // idとnameのカラムを選択している
         ->select('id', 'name')
         ->get();
 
@@ -61,6 +63,8 @@ class ProductController extends Controller
         ->orderBy('updated_at', 'desc')
         ->get();
 
+        // リレーション先を取得するのに、N+1問題があるため、
+        // Eager Loadingとしてwithメソッドを用いて取得している
         $categories = PrimaryCategory::with('secondary')
         ->get();
 
@@ -68,15 +72,11 @@ class ProductController extends Controller
             compact('shops', 'images', 'categories'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(ProductRequest $request)
     {
 
+        // トランザクションで1回の処理でProductとstockを
+        // まとめて保存している
         try{
             DB::transaction(function () use($request) {
                 $product = Product::create([
@@ -130,6 +130,8 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = Product::findOrFail($id);
+
+        // 量と在庫を合計した結果をsum('quantity')とする
         $quantity = Stock::where('product_id', $product->id)
         ->sum('quantity');
 
@@ -150,15 +152,10 @@ class ProductController extends Controller
             'images', 'categories'));        
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(ProductRequest $request, $id)
     {
+
+        // ProductRequestに追加でバリデーションを行う
         $request->validate([
             'current_quantity' => 'required|integer',
         ]);
@@ -167,6 +164,10 @@ class ProductController extends Controller
         $quantity = Stock::where('product_id', $product->id)
         ->sum('quantity');
 
+        // ★楽観的ロック★
+        // 画面表示後に在庫数が変わっている可能性がある 
+        // (Edit～updateの間でユーザーが購入した場合など) 
+        // 在庫が同じか確認し違っていたらeditに戻す
         if($request->current_quantity !== $quantity){
             $id = $request->route()->parameter('product');
             return redirect()->route('owner.products.edit', [ 'product' => $id])
@@ -174,6 +175,8 @@ class ProductController extends Controller
                 'status' => 'alert']);            
 
         } else {
+
+            // ProductとStockをトランザクションで同時更新する
 
             try{
                 DB::transaction(function () use($request, $product) {

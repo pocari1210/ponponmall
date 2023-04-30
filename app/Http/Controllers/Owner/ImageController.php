@@ -36,14 +36,14 @@ class ImageController extends Controller
             return $next($request);
         });        
     }    
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+
     public function index()
     {
+        // ownerのid情報を取得
         $images = Image::where('owner_id', Auth::id())
+
+        // 更新されたものを軸に降順にしている
         ->orderBy('updated_at', 'desc')
         ->paginate(20);
 
@@ -51,27 +51,25 @@ class ImageController extends Controller
         compact('images'));        
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         return view('owner.images.create');        
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(UploadImageRequest $request)
     {
+
+        // formからわたってきた"files[][image]"を取得
         $imageFiles = $request->file('files');
+        
         if(!is_null($imageFiles)){
+
+            // foreachで画像を一枚ずつ表示している
             foreach($imageFiles as $imageFile){
+
+                // インタベーションで画像のサイズを設定し、アップロードしている
                 $fileNameToStore = ImageService::upload($imageFile, 'products');    
                 Image::create([
                     'owner_id' => Auth::id(),
@@ -86,23 +84,11 @@ class ImageController extends Controller
         'status' => 'info']);        
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $image = Image::findOrFail($id);
@@ -111,13 +97,6 @@ class ImageController extends Controller
         compact('image'));        
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -134,12 +113,6 @@ class ImageController extends Controller
         'status' => 'info']);        
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
 public function destroy($id)
 {
     $image = Image::findOrFail($id);
@@ -149,6 +122,8 @@ public function destroy($id)
     ->orWhere('image3', $image->id)
     ->orWhere('image4', $image->id)
     ->get();
+
+    // eachをつかうとコレクションの中身を一つずつ処理ができる
 
     if($imageInProducts){
         $imageInProducts->each(function($product) use($image){
@@ -172,6 +147,7 @@ public function destroy($id)
     }        
     $filePath = 'public/products/' . $image->filename;
 
+        // ファイルがあった場合、削除を行う
         if(Storage::exists($filePath)){
             Storage::delete($filePath);
         }

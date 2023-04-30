@@ -15,10 +15,15 @@ return new class extends Migration
     {
         Schema::create('shops', function (Blueprint $table) {
             $table->id();
+
+            // ownerテーブルと外部キー制約
+            // 外部キー制約でテーブルを紐づけた場合、
+            // 削除や更新をする場合、cascadeをつける必要がある
             $table->foreignId('owner_id')
             ->constrained()
             ->onUpdate('cascade')
             ->onDelete('cascade');
+            
             $table->string('name'); 
             $table->text('information'); 
             $table->string('filename'); 

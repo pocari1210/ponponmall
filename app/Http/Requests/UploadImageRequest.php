@@ -25,6 +25,10 @@ class UploadImageRequest extends FormRequest
     {
         return [
             'image' => 'image|mimes:jpg,jpeg,png|max:2048',
+
+            // 複数画像を登録する際、配列でバリデーションで登録
+            // 「.*.」とすることで、配列でわたってくる各要素を
+            // バリデーションでチェック
             'files.*.image' => 'required|image|mimes:jpg,jpeg,png|max:2048',
         ];
     }

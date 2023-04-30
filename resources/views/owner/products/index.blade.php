@@ -19,6 +19,9 @@
                                 <div class="w-1/4 p-2 md:p-4">
                                     <a href="{{ route('owner.products.edit', ['product' => $product->id ])}}">  
                                         <div class="border rounded-md p-2 md:p-4">
+
+                                        <!-- 一枚目の画像ははらないこともあるので、
+                                        マスタッシュで囲み、null合体演算子(??)でnullか判定 -->
                                         <x-thumbnail filename="{{$product->imageFirst->filename ?? ''}}" type="products" />
                                             <div class="text-gray-700">{{ $product->name }}</div>
                                         </div>

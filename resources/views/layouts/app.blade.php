@@ -18,6 +18,8 @@
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
 
+            <!-- guradsでログインされた権限によって
+            ナビゲーションの表示を変更する -->
             @if(request()->is('admin*'))
                 @include('layouts.admin-navigation')
             @elseif(request()->is('owner*'))

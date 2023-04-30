@@ -17,6 +17,8 @@ use App\Models\PrimaryCategory;
 class ItemController extends Controller
 {
 
+    // 売り切れなど販売していない商品を検索した際、
+    // 表示ができてしまう不具合を解消
     public function __construct()
     {
         $this->middleware('auth:users');
@@ -24,8 +26,15 @@ class ItemController extends Controller
         $this->middleware(function ($request, $next) {
 
             $id = $request->route()->parameter('item'); 
-            if(!is_null($id)){ 
-            $itemId = Product::availableItems()->where('products.id', $id)->exists();
+
+            // $idがnullでない場合の処理
+            if(!is_null($id)){
+
+                // ルートパラメーターで入ってきたものが、availableItems()で
+                // 表示できる商品かwhereで条件検索している
+                $itemId = Product::availableItems()->where('products.id', $id)->exists();
+
+                // $itemIdが存在しない場合、404エラーを返す
                 if(!$itemId){ 
                     abort(404);
                 }
@@ -55,10 +64,14 @@ class ItemController extends Controller
 
     public function show($id)
     {
+
+        // 引数を$idとし、商品のid情報を取得
         $product = Product::findOrFail($id);
         $quantity = Stock::where('product_id', $product->id)
         ->sum('quantity');
 
+        // 在庫の数が9個以上あった場合は、
+        // ビューのプルダウンで選べる数を9で固定する
         if($quantity > 9){
             $quantity = 9;
         }

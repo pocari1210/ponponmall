@@ -11,12 +11,15 @@
         <div class="p-6 bg-white border-b border-gray-200">
 
         <section class="text-gray-600 body-font relative">
-  <div class="container px-5 py-12 mx-auto">
-    <div class="flex flex-col text-center w-full mb-8">
-      <h1 class="sm:text-3xl text-2xl font-medium title-font mb-2 text-gray-900">SHOP情報編集</h1>
-    </div>
+    <div class="container px-5 py-12 mx-auto">
+        <div class="flex flex-col text-center w-full mb-8">
+            <h1 class="sm:text-3xl text-2xl font-medium title-font mb-2 text-gray-900">SHOP情報編集</h1>
+        </div>
 
     <x-input-error class="mb-4 text-center" :messages="$errors->all()"/>
+
+    <!-- 'owner'をキーとし、$owner->idでownerのidを取得している -->
+    <!-- updateをする場合、@method('PUT')を追記する必要がある -->
     <form method="post" action="{{route('admin.owners.update',['owner'=> $owner->id])}}">
         @method('PUT')
         @csrf
@@ -25,13 +28,13 @@
             <div class="mx-auto p-2 w-1/2">
                     <div class="relative">
                         <label for="name" class="leading-7 text-sm text-gray-600">Shop名</label>
-                        <input type="text" id="name" name="name" value="{{ $owner->name}}" required class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                        <input type="text" id="name" name="name" value="{{ $owner->name }}" required class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
                     </div>
                 </div>
             <div class="mx-auto p-2 w-1/2">
                 <div class="relative">
                     <label for="email" class="leading-7 text-sm text-gray-600">メールアドレス</label>
-                    <input type="email" id="email" name="email" value="{{ $owner->email}}" required class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                    <input type="email" id="email" name="email" value="{{ $owner->email }}" required class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
                 </div>
             </div>
             <div class="p-2 w-1/2 mx-auto">
@@ -43,7 +46,7 @@
             <div class="p-2 w-1/2 mx-auto">
                 <div class="relative">
                     <label for="password" class="leading-7 text-sm text-gray-600">パスワード</label>
-                    <input type="password" id="password" name="password" value="{{ old('password')}}" required class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                    <input type="password" id="password" name="password" value="{{ old('password') }}" required class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
                 </div>
             </div>
             <div class="p-2 w-1/2 mx-auto">
