@@ -4,6 +4,7 @@
 
 <h3>仕様ライブラリ</h3>
 php:8.02<br>
+Laravel/Mix<br>
 breeze:1<br>
 stripe:10.12<br>
 intervention/image:2.7<br>
