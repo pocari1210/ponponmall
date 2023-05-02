@@ -138,6 +138,8 @@ class OwnersController extends Controller
     }
 
     public function restoreExpiredOwner($id){
+
+        // ソフトデリートをしたものを復元
         $restoredOwner=Owner::onlyTrashed()->findOrFail($id)->restore();
         
         return redirect()->route('admin.owners.index',

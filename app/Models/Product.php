@@ -45,15 +45,13 @@ class Product extends Model
     public function imageFirst()
     {
         return $this->belongsTo(Image::class,'image1','id');
+        // ⇒image1とidをつけていない場合、Laravel側で推測ができないため、
+        // 第三引数をimageモデルのidとし、紐づけている
     }
 
     public function imageSecond()
     {
-
         return $this->belongsTo(Image::class,'image2','id');
-        // ⇒image1とidをつけていない場合、Laravel側で推測ができないため、
-        // 第三引数をimageモデルのidとし、紐づけている
-        
     }
 
     public function imageThird()
