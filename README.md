@@ -1,6 +1,19 @@
 <h1>◆ponponmall◆</h1>
 
 <p>stripeのライブラリを活用し、モール形式のネットショップを構築しました。</p>
+<a href ="http://18.182.16.40/ponponmall/public/">サイトはこちら</a><br><br>
+
+◆admin◆<br>
+admin@admin.com<br>
+password123<br>
+
+◆owner◆<br>
+test1@test.com<br>
+password123<br>
+
+◆user◆<br>
+user@user.com<br>
+password123<br>
 
 <h3>仕様ライブラリ</h3>
 php:8.02<br>
