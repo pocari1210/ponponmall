@@ -30,6 +30,34 @@ class ShopSeeder extends Seeder
                 'filename' => 'shop2.jpg',
                 'is_selling' => true    
             ],
+            [
+                'owner_id' => 3,
+                'name' => 'ここに店名が入ります',
+                'information' => 'ここにお店の情報が入ります。ここにお店の情報が入ります。ここにお店の情報が入ります。',
+                'filename' => 'shop3.jpg',
+                'is_selling' => true    
+            ],
+            [
+                'owner_id' => 4,
+                'name' => 'ここに店名が入ります',
+                'information' => 'ここにお店の情報が入ります。ここにお店の情報が入ります。ここにお店の情報が入ります。',
+                'filename' => 'shop4.jpg',
+                'is_selling' => true    
+            ],
+            [
+                'owner_id' => 5,
+                'name' => 'ここに店名が入ります',
+                'information' => 'ここにお店の情報が入ります。ここにお店の情報が入ります。ここにお店の情報が入ります。',
+                'filename' => 'shop5.jpg',
+                'is_selling' => true    
+            ],
+            [
+                'owner_id' => 6,
+                'name' => 'ここに店名が入ります',
+                'information' => 'ここにお店の情報が入ります。ここにお店の情報が入ります。ここにお店の情報が入ります。',
+                'filename' => 'shop6.jpg',
+                'is_selling' => true    
+            ],
             ]);
     }
 }

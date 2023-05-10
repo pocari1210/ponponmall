@@ -21,8 +21,8 @@ class RouteServiceProvider extends ServiceProvider
     // ホームURLを設定(ログインをした後の遷移先を設定)
     // 定数の場合、全て大文字にするルールがある
     public const HOME = '/user';
-    public const OWNER_HOME = '/owner';
-    public const ADMIN_HOME = '/admin';
+    public const OWNER_HOME = '/owner/shops/index';
+    public const ADMIN_HOME = '/admin/owners';
 
     /**
      * Define your route model bindings, pattern filters, and other route configuration.
