@@ -45,13 +45,20 @@ Shopのトップ画像、説明を編集することができます<br>
 <img src = "https://github.com/pocari1210/ponponmall/assets/98627989/e9b73b04-f175-4762-bcd3-595e30af2a1b" width = 300px height=200px>
 <img src = "https://github.com/pocari1210/ponponmall/assets/98627989/62d671ff-6cb9-496c-b287-b84be4d95a51" width = 300px height=200px><br><br>
 
-
-
-◆user◆<br>
+<h2>◆user◆</h2>
 user@user.com<br>
 password123<br>
 
+<h3>★ホームページ★</h3>
+登録された商品が陳列されており、カテゴリー、キーワード、おすすめ順、表示件数の検索機能を<br>
+実装しました<br><br>
 
+<img src = "https://github.com/pocari1210/ponponmall/assets/98627989/fee4418e-009c-45bf-a3d4-e701bcf74e61" width = 300px height=200px><br><br>
+
+商品を選択したら、商品の詳細ページに進み、カートに追加し、商品を購入することが<br>
+できます(stripe決済)<br><br>
+<img src = "https://github.com/pocari1210/ponponmall/assets/98627989/a309a8f2-41d4-4bbf-97ef-1cc8c62c543e" width = 300px height=200px>
+<img src = "https://github.com/pocari1210/ponponmall/assets/98627989/a14a5a53-765a-4138-be50-093bc66003aa" width = 300px height=200px><br><br>
 
 <h2>作成した背景</h2>
 以前ASPのネットショップの営業をしていたことがあり、<br>
