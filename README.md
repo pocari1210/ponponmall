@@ -7,6 +7,12 @@
 admin@admin.com<br>
 password123<br>
 
+shop一覧ページ<br>
+登録されているshop,shopを登録することができます
+
+
+<img src = "https://github.com/pocari1210/ponponmall/assets/98627989/9e98abf4-1279-495b-99ec-73500a93c297" width = 400px height=280px>
+
 ◆owner◆<br>
 test1@test.com<br>
 password123<br>
