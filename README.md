@@ -11,7 +11,9 @@ shop一覧ページ<br>
 登録されているshop,shopを登録することができます
 
 
-<img src = "https://github.com/pocari1210/ponponmall/assets/98627989/9e98abf4-1279-495b-99ec-73500a93c297" width = 400px height=280px>
+<img src = "https://github.com/pocari1210/ponponmall/assets/98627989/9e98abf4-1279-495b-99ec-73500a93c297" width = 300px height=200px>
+<img src = "https://github.com/pocari1210/ponponmall/assets/98627989/5a9ab551-d882-4360-980a-d109e1ce0fd0" width = 300px height=200px>
+
 
 ◆owner◆<br>
 test1@test.com<br>
