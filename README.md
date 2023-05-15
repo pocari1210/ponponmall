@@ -3,16 +3,21 @@
 <p>stripeのライブラリを活用し、モール形式のネットショップを構築しました。</p>
 <a href ="http://18.182.16.40/ponponmall/public/">サイトはこちら</a><br><br>
 
-◆admin◆<br>
+<h2>◆admin◆</h2>
 admin@admin.com<br>
-password123<br>
+password123<br><br>
 
-shop一覧ページ<br>
-登録されているshop,shopを登録することができます
-
+<h3>★shop一覧ページ★</h3>
+登録されているshop,shopを登録することができます<br><br>
 
 <img src = "https://github.com/pocari1210/ponponmall/assets/98627989/9e98abf4-1279-495b-99ec-73500a93c297" width = 300px height=200px>
 <img src = "https://github.com/pocari1210/ponponmall/assets/98627989/5a9ab551-d882-4360-980a-d109e1ce0fd0" width = 300px height=200px>
+<br>
+
+<h3>★期限切れShop管理ページ★</h3>
+shop一覧ページで削除ボタンを押したものが登録され、期限切れShop管理ページで<br>
+完全削除、復元を行うことができます。(ソフトデリート機能)<br><br>
+<img src = "https://github.com/pocari1210/ponponmall/assets/98627989/3c02b4be-e36c-4759-8c8a-7ed9bb939719" width = 300px height=200px>
 
 
 ◆owner◆<br>
