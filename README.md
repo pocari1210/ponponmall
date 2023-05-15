@@ -3,7 +3,7 @@
 <p>stripeのライブラリを活用し、モール形式のネットショップを構築しました。</p>
 <a href ="http://18.182.16.40/ponponmall/public/">サイトはこちら</a><br><br>
 
-<h3>仕様ライブラリ</h3>
+<h3>使用したライブラリ</h3>
 php:8.02<br>
 Laravel/Mix<br>
 breeze:1<br>
