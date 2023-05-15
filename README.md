@@ -24,17 +24,32 @@ password123<br><br>
 <h3>★期限切れShop管理ページ★</h3>
 shop一覧ページで削除ボタンを押したものが登録され、期限切れShop管理ページで<br>
 完全削除、復元を行うことができます。(ソフトデリート機能)<br><br>
-<img src = "https://github.com/pocari1210/ponponmall/assets/98627989/3c02b4be-e36c-4759-8c8a-7ed9bb939719" width = 300px height=200px>
+<img src = "https://github.com/pocari1210/ponponmall/assets/98627989/10dc9772-72c4-4912-bdc5-e012ab67dc09" width = 300px height=200px><br>
 
-
-◆owner◆<br>
+<h2>◆owner◆</h2>
 test1@test.com<br>
-password123<br>
+password123<br><br>
+
+<h3>★shop一覧ページ★</h3>
+Shopのトップ画像、説明を編集することができます<br>
+<img src = "https://github.com/pocari1210/ponponmall/assets/98627989/92b2deca-f4ec-4c2f-bdd5-8c8a39c41357" width = 300px height=200px><br><br>
+
+<h3>★画像管理ページ★</h3>
+商品画像を登録し、管理を行うことができます。<br><br>
+<img src = "https://github.com/pocari1210/ponponmall/assets/98627989/e3df81f6-13bb-42f6-a217-ca28239ec317" width = 300px height=200px>
+<img src = "https://github.com/pocari1210/ponponmall/assets/98627989/a1755cf3-cf21-4f24-ba1a-4537d9641b24" width = 300px height=200px><br><br>
+
+<h3>★画像管理ページ★</h3>
+商品名、説明、在庫、カテゴリーを入力し、商品を登録することができます<br>
+商品の画像は、画像管理ページから選択し、5枚まで登録できる仕様になっています。<br><br>
+<img src = "https://github.com/pocari1210/ponponmall/assets/98627989/e9b73b04-f175-4762-bcd3-595e30af2a1b" width = 300px height=200px>
+<img src = "https://github.com/pocari1210/ponponmall/assets/98627989/62d671ff-6cb9-496c-b287-b84be4d95a51" width = 300px height=200px><br><br>
+
+
 
 ◆user◆<br>
 user@user.com<br>
 password123<br>
-
 
 
 
