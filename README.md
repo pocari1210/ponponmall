@@ -3,6 +3,13 @@
 <p>stripeのライブラリを活用し、モール形式のネットショップを構築しました。</p>
 <a href ="http://18.182.16.40/ponponmall/public/">サイトはこちら</a><br><br>
 
+<h3>仕様ライブラリ</h3>
+php:8.02<br>
+Laravel/Mix<br>
+breeze:1<br>
+stripe:10.12<br>
+intervention/image:2.7<br>
+
 <h2>◆admin◆</h2>
 admin@admin.com<br>
 password123<br><br>
@@ -28,12 +35,7 @@ password123<br>
 user@user.com<br>
 password123<br>
 
-<h3>仕様ライブラリ</h3>
-php:8.02<br>
-Laravel/Mix<br>
-breeze:1<br>
-stripe:10.12<br>
-intervention/image:2.7<br>
+
 
 
 <h2>作成した背景</h2>
